@@ -18,8 +18,6 @@ RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
 # Install libuv for Kestrel from source code (binary is not in wheezy and one in jessie is still too old)
 # Combining this with the uninstall and purge will save us the space of the build tools in the image
 
-WORKDIR $BASE_PATH/CardWarWEB/src/CardWarWEB
-
 RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -qq update \
 	&& apt-get -qqy install autoconf automake build-essential libtool \
@@ -34,6 +32,9 @@ RUN LIBUV_VERSION=1.4.2 \
 	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
+
+WORKDIR /v/CardWarWEB/src/CardWarWEB/
+CMD ["dnu", "restore"]
 
 EXPOSE 80
 ENTRYPOINT ["dnx", "-p", "project.json", "kestrel"]
