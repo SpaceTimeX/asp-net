@@ -2,12 +2,13 @@ FROM debian:jessie
 
 ENV DNX_VERSION 1.0.0-rc1-final
 ENV DNX_USER_HOME /opt/DNX_BRANCH
+ENV BASE_PATH /opt/BASE
 #Currently the CLR packages don't have runtime ids to handle debian:jessie but
 #we are making sure that the dependencies are the right versions and are opting for
 #the smaller base image. So we use this variable to overwrite the default detection.
 ENV DNX_RUNTIME_ID ubuntu.14.04-x64
 
-RUN apt-get -qq update && apt-get -qqy install unzip curl libicu-dev libunwind8 gettext libssl-dev libcurl3-gnutls zlib1g && rm -rf /var/lib/apt/lists/*
+RUN apt-get -qq update && apt-get -qqy install unzip git curl libicu-dev libunwind8 gettext libssl-dev libcurl3-gnutls zlib1g && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://raw.githubusercontent.com/aspnet/Home/dev/dnvminstall.sh | DNX_USER_HOME=$DNX_USER_HOME DNX_BRANCH=v$DNX_VERSION sh
 RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
@@ -16,6 +17,9 @@ RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
 
 # Install libuv for Kestrel from source code (binary is not in wheezy and one in jessie is still too old)
 # Combining this with the uninstall and purge will save us the space of the build tools in the image
+
+WORKDIR $BASE_PATH/CardWarWEB/src/CardWarWEB
+
 RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -qq update \
 	&& apt-get -qqy install autoconf automake build-essential libtool \
@@ -27,6 +31,12 @@ RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -y purge autoconf automake build-essential libtool \
 	&& apt-get -y autoremove \
 	&& apt-get -y clean \
-	&& rm -rf /var/lib/apt/lists/*
+	&& rm -rf /var/lib/apt/lists/* \
+	&& mkdir $BASE_PATH \
+	&& git clone git@github.com:SpaceTimeX/WebCardWar.git $BASE_PATH/CardWarWEB/ \
+	&& dnu restore
 
 ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
+
+EXPOSE 80
+ENTRYPOINT ["dnx", "-p", "project.json", "kestrel"]
