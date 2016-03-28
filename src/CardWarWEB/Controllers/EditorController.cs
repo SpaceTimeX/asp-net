@@ -502,6 +502,8 @@ namespace CardWarWEB.Controllers
                         bytes = ms.ToArray();
                     }
                     File.WriteAllBytes(savePath, bytes);
+                    stream.Close();
+                    reader.Close();
                     State = "SUCCESS";
                 }
                 catch (Exception e)

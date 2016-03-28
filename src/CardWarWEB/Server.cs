@@ -18,5 +18,10 @@ namespace CardWarWEB
         {
             return Conf.appEnv.ApplicationBasePath;
         }
+
+        public static string GetWebRootPath()
+        {
+            return Conf.env.WebRootPath;
+        }
     }
 }

@@ -1,1 +1,1 @@
-dnx -p src/CardWarWEB/ kestrel
+C:\Users\Administrator\.dnx\runtimes\dnx-clr-win-x86.1.0.0-rc1-final\bin\dnx -p src/CardWarWEB/ kestrel

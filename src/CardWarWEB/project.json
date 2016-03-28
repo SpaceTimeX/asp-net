@@ -15,8 +15,7 @@
 		"Microsoft.AspNet.Identity": "3.0.0-rc1-final",
 		"Newtonsoft.Json": "8.0.3",
 		"Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
-		"Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
-		"System.Net.NameResolution": "4.0.0-beta-23019"
+		"Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final"
 	},
 
 	"commands": {
@@ -24,39 +23,7 @@
 	},
 
 	"frameworks": {
-		"dnxcore50": {
-			"compilationOptions": {
-				"allowUnsafe": true,
-				"debugType": "full"
-			},
-			"dependencies": {
-				"Microsoft.CSharp": "4.0.1-beta-23516",
-				"System.Runtime": "4.0.21-beta-23516",
-				"System.Security.SecureString": "4.0.0-beta-23019",
-				"System.Text.Encoding": "4.0.11-beta-23516",
-				"System.IO": "4.0.11-beta-23516",
-				"System.Net.WebSockets": "4.0.0-beta-23019",
-				"System.Runtime.Numerics": "4.0.1-beta-23516",
-				"System.Linq": "4.0.1-beta-23516",
-				"System.Threading": "4.0.11-beta-23516",
-				"System.Console": "4.0.0-beta-23019",
-				"System.Collections": "4.0.11-beta-23516",
-				"System.Data.SQLite": "1.0.99",
-				"System.Data.SqlClient": "4.0.0-beta-23019",
-				"System.Data.Common": "4.0.1-beta-23516",
-				"System.Diagnostics.Process": "4.0.0-beta-23019",
-				"System.Runtime.Extensions": "4.0.10",
-				"System.Net.Requests": "4.0.11-beta-23516",
-				"System.Xml.XmlSerializer": "4.0.10-beta-23019",
-				"System.Runtime.Serialization.Xml": "4.0.10-beta-23019",
-				"System.Runtime.Serialization.Json": "4.0.1-beta-23516",
-				"System.Runtime.Serialization.Primitives": "4.0.10-beta-23019"
-
-
-
-			}
-
-		}
+		"dnx451": {}
 	},
 
 	"exclude": [

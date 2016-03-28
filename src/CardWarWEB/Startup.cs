@@ -11,9 +11,14 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.Runtime.InteropServices;
+using System.IO;
+using Newtonsoft.Json;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace CardWarWEB
 {
+
+
     public class Startup
     {
 
@@ -92,6 +97,36 @@ namespace CardWarWEB
 
             });
 
+            if (Directory.Exists("/v"))
+            {
+                Directory.CreateDirectory("/v/Users");
+                if (File.Exists("/v/Users.data"))
+                {
+                    FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.UserConf = (Dictionary<string, Dictionary<string, string>>)bf.Deserialize(fs);
+                }
+                else {
+                    FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.UserConf);
+                }
+            }
+            else
+            {
+                Directory.CreateDirectory(Server.GetWebRootPath() + "/Users");
+                if (File.Exists(Server.GetWebRootPath() + "/Users.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetWebRootPath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.UserConf = (Dictionary<string, Dictionary<string, string>>)bf.Deserialize(fs);
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetWebRootPath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.UserConf);
+                }
+            }
         }
     }
 }

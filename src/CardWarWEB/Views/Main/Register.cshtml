@@ -1,6 +1,108 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    // ViewBag.Title = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>注册 - 登记住户</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="../sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="../sRaw/ui/img/favicon.ico">
+	<style type="text/css">
+		body {
+			background-color: rgba(58, 199, 228, 0.66);
+		}
+
+		.headline {
+			padding: 5px 0 0;
+			text-align: center;
+			color: #9F00FF;
+		}
+
+		.freg {
+			position: relative;
+			background-color: #edeff1;
+			border-radius: 6px;
+			box-sizing: border-box;
+			width: 50%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 20px;
+			margin-top: 60px;
+		}
+
+		.input {
+			padding: 0 50px 0;
+			text-align: center;
+			width: 65%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 20px;
+		}
+
+			.input:focus {
+				color: #228586;
+				border-color: #08C534 !important;
+			}
+
+		.fbutton {
+			margin-left: calc(50% - 0.5 * 65%);
+			margin-bottom: 10px;
+			width: 65%;
+			color: white;
+			background-color: #74AB28;
+		}
+
+			.fbutton:hover {
+				background-color: #18882A !important;
+				border-color: #18882A !important;
+			}
+
+			.fbutton:active {
+				background-color: #286090 !important;
+				border-color: #204d74 !important;
+			}
+
+		.about {
+			text-align: center;
+			color: white;
+		}
+
+		.calert {
+			margin-top: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div class="freg container" id="view">
+		<h3 class="headline">注册</h3>
+		<input type="text" placeholder="输入账号" class="input form-control flat" id="regusername" />
+		<input type="password" placeholder="输入密码" class="input form-control flat" id="regpassword" />
+		<input type="password" placeholder="确认密码" class="input form-control flat" id="regconfirmpassword" />
+		<input type="email" placeholder="邮箱" class="input form-control flat" id="regemail" />
+		<button class="fbutton btn btn-embossed" id="register">注册 - 登记住户</button><br />
+	</div>
+	<h5 class="about">Powered By SpaceTimeX</h5>
+	<h6 class="about">Using Custom Application</h6>
+	<script src="~/sRaw/ui/js/jquery.min.js"></script>
+	<script src="~/sRaw/ui/js/video.js"></script>
+	<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+	<script src="~/sRaw/ui/js/prettify.js"></script>
+	<script src="~/sRaw/ui/js/application.js"> </script>
+	<script>
+		$("#register").click(function () {
+
+			var added = "<div class=\"calert alert alert-danger alert-dismissible fade in\" role=\"alert\">\n" +
+			"<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+			"<strong>注册失败！请确保账号和密码格式正确</strong> \n" +
+			"</div>";
+			$("#view").prepend(added);
+
+		});
+
+	</script>
+</body>
+</html>

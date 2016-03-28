@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.PlatformAbstractions;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,6 @@ namespace CardWarWEB
         public static IHostingEnvironment env;
         public static IApplicationEnvironment appEnv;
         public static Dictionary<string, Dictionary<string, string>> UserConf = new Dictionary<string, Dictionary<string, string>>();
+        
     }
 }

