@@ -1,0 +1,114 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>登录 - 主城</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="../sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="../sRaw/ui/img/favicon.ico">
+	<!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+	<!--[if lt IE 9]>
+	  <script src="../dist/js/vendor/html5shiv.js"></script>
+	  <script src="../dist/js/vendor/respond.min.js"></script>
+	<![endif]-->
+	<style type="text/css">
+		.headline {
+			padding: 5px 0 0;
+			text-align: center;
+			color: darkmagenta;
+		}
+
+		.about {
+			text-align: center;
+			color: white;
+		}
+
+		.input {
+			padding: 0 50px 0;
+			text-align: center;
+			width: 65%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 20px;
+		}
+
+			.input:focus {
+				color: darkblue;
+				border-color: lightcoral !important;
+			}
+
+		body {
+			background-color: #1abc9c;
+		}
+
+		.flogin {
+			position: relative;
+			background-color: #edeff1;
+			border-radius: 6px;
+			box-sizing: border-box;
+			width: 50%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 20px;
+			margin-top: 60px;
+		}
+
+		.fbutton {
+			margin-left: calc(50% - 0.5 * 65%);
+			margin-bottom: 10px;
+			width: 65%;
+		}
+
+		.fbuttonr {
+			margin-left: calc(50% - 0.5 * 65%);
+			margin-bottom: 10px;
+			width: 65%;
+			background-color: #0ba8d2 !important;
+			border-color: #0ba8d2 !important;
+		}
+
+			.fbuttonr:hover {
+				background-color: #09b8e7 !important;
+				border-color: #09b8e7 !important;
+			}
+
+			.fbuttonr:active {
+				background-color: #286090 !important;
+				border-color: #204d74 !important;
+			}
+	</style>
+</head>
+<body>
+	<div class="flogin container">
+		<h3 class="headline"> 登录</h3>
+		<input type="text" placeholder="输入账号" class="input form-control flat" id="inputusername" />
+		<input type="password" placeholder="输入密码" class="input form-control flat" id="inputpassword" />
+		<button class="fbutton btn btn-embossed btn-primary" id="login">登录 - 进入主城</button><br />
+		<button class="fbuttonr btn btn-primary" id="register">点击这里注册一个账号</button><br />
+	</div>
+	<h5 class="about">Powered By SpaceTimeX</h5>
+	<h6 class="about">Using Custom Application</h6>
+	<script src="~/sRaw/ui/js/jquery.min.js"></script>
+	<script src="~/sRaw/ui/js/video.js"></script>
+	<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+	<script src="~/sRaw/ui/js/prettify.js"></script>
+	<script src="~/sRaw/ui/js/application.js"> </script>
+	<script>
+
+		$("#login").click(function () {
+			
+		});
+
+		$("#register").click(function () {
+			window.location = "/Main/Register";
+		});
+
+
+	</script>
+</body>
+</html>

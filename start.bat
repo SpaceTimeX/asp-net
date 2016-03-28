@@ -1,0 +1,1 @@
+dnx -p src/CardWarWEB/ kestrel

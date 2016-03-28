@@ -33,9 +33,10 @@ RUN LIBUV_VERSION=1.4.2 \
 
 ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
 
-WORKDIR /v/CardWarWEB/src/CardWarWEB/
-
+COPY . /app
+WORKDIR /app/src/CardWarWEB/
+RUN ["dnu", "restore"]
 
 EXPOSE 80
-CMD ["dnu", "restore"]
+
 ENTRYPOINT ["dnx", "-p", "project.json", "kestrel"]
