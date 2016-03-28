@@ -14,7 +14,7 @@ namespace CardWarWEB.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View("Login");
         }
 
         [Route("Register")]
@@ -24,7 +24,7 @@ namespace CardWarWEB.Controllers
         }
 
 
-        [Route("Login")]
+        [Route("Login", Name = "Login")]
         public IActionResult Login()
         {
             return View();

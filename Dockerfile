@@ -39,4 +39,4 @@ RUN ["dnu", "restore"]
 
 EXPOSE 80
 
-ENTRYPOINT ["dnx", "-p", "project.json", "kestrel"]
+ENTRYPOINT ["dnx", "kestrel"]
