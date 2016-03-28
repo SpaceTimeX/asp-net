@@ -31,9 +31,7 @@ RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -y purge autoconf automake build-essential libtool \
 	&& apt-get -y autoremove \
 	&& apt-get -y clean \
-	&& rm -rf /var/lib/apt/lists/* \
-	&& git clone https://github.com/SpaceTimeX/WebCardWar.git $BASE_PATH/CardWarWEB/ \
-	&& dnu restore
+	&& rm -rf /var/lib/apt/lists/*
 
 ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
 
