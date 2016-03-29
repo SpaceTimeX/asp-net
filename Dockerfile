@@ -34,6 +34,7 @@ ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
 # Prevent `dnu restore` from stalling (gh#63, gh#80)
 ENV MONO_THREADS_PER_CPU 50
 
+VOLUME /v
 COPY . /app
 WORKDIR /app/src/CardWarWEB/
 RUN ["dnu", "restore"]
