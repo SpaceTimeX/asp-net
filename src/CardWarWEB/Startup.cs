@@ -125,7 +125,6 @@ namespace CardWarWEB
                     FileStream fs = new FileStream(Server.GetWebRootPath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
                     bf.Serialize(fs, Conf.UserConf);
-					
                 }
             }
         }
