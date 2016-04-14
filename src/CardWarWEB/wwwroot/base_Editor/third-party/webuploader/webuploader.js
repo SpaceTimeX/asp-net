@@ -5210,7 +5210,7 @@
                         RGB_YUV_TABLE[(i+ 512)>>0]  =   7471 * i + 0x8000;
                         RGB_YUV_TABLE[(i+ 768)>>0]  = -11059 * i;
                         RGB_YUV_TABLE[(i+1024)>>0]  = -21709 * i;
-                        RGB_YUV_TABLE[(i+1280)>>0]  =  32768 * i + 0x807FFF;
+                        RGB_YUV_TABLE[(i+1024)>>0]  =  32768 * i + 0x807FFF;
                         RGB_YUV_TABLE[(i+1536)>>0]  = -27439 * i;
                         RGB_YUV_TABLE[(i+1792)>>0]  = - 5329 * i;
                     }
@@ -5625,8 +5625,8 @@
     
                             // use lookup table (slightly faster)
                             YDU[pos] = ((RGB_YUV_TABLE[r]             + RGB_YUV_TABLE[(g +  256)>>0] + RGB_YUV_TABLE[(b +  512)>>0]) >> 16)-128;
-                            UDU[pos] = ((RGB_YUV_TABLE[(r +  768)>>0] + RGB_YUV_TABLE[(g + 1024)>>0] + RGB_YUV_TABLE[(b + 1280)>>0]) >> 16)-128;
-                            VDU[pos] = ((RGB_YUV_TABLE[(r + 1280)>>0] + RGB_YUV_TABLE[(g + 1536)>>0] + RGB_YUV_TABLE[(b + 1792)>>0]) >> 16)-128;
+                            UDU[pos] = ((RGB_YUV_TABLE[(r +  768)>>0] + RGB_YUV_TABLE[(g + 1024)>>0] + RGB_YUV_TABLE[(b + 1024)>>0]) >> 16)-128;
+                            VDU[pos] = ((RGB_YUV_TABLE[(r + 1024)>>0] + RGB_YUV_TABLE[(g + 1536)>>0] + RGB_YUV_TABLE[(b + 1792)>>0]) >> 16)-128;
     
                         }
     

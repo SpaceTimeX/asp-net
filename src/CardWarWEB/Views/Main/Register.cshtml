@@ -8,12 +8,15 @@
 	<!-- Loading Bootstrap -->
 	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Loading Flat UI -->
-	<link href="../sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
+	<link href="~/sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
 
-	<link rel="shortcut icon" href="../sRaw/ui/img/favicon.ico">
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
 	<style type="text/css">
 		body {
 			background-color: rgba(58, 199, 228, 0.66);
+			width: 400px;
+			margin-left: auto;
+			margin-right: auto;
 		}
 
 		.headline {
@@ -27,7 +30,7 @@
 			background-color: #edeff1;
 			border-radius: 6px;
 			box-sizing: border-box;
-			width: 50%;
+			width: 400px;
 			margin-left: auto;
 			margin-right: auto;
 			margin-bottom: 20px;
@@ -35,9 +38,8 @@
 		}
 
 		.input {
-			padding: 0 50px 0;
 			text-align: center;
-			width: 65%;
+			width: 300px;
 			margin-left: auto;
 			margin-right: auto;
 			margin-bottom: 20px;
@@ -49,9 +51,10 @@
 			}
 
 		.fbutton {
-			margin-left: calc(50% - 0.5 * 65%);
+			margin-left: 35px;
+			margin-right: auto;
 			margin-bottom: 10px;
-			width: 65%;
+			width: 300px;
 			color: white;
 			background-color: #74AB28;
 		}
@@ -67,8 +70,11 @@
 			}
 
 		.about {
-			text-align: center;
+			position: relative;
+			margin-left: auto;
+			margin-right: auto;
 			color: white;
+			text-align: center;
 		}
 
 		.calert {
@@ -91,15 +97,38 @@
 	<script src="~/sRaw/ui/js/video.js"></script>
 	<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
 	<script src="~/sRaw/ui/js/prettify.js"></script>
-	<script src="~/sRaw/ui/js/application.js"> </script>
+	<script src="~/sRaw/ui/js/application.js"></script>
+	<script src="~/sRaw/ui/js/sign.js"></script>
 	<script>
+		var iia = false;
 		$("#register").click(function () {
+			if (iia) return;
+			$("#register").addClass("disabled");
+			iia = true;
+			var _username = $("#regusername").val();
+			var _password = $("#regpassword").val();
+			var _confirmpassword = $("#regconfirmpassword").val();
+			var _email = $("#regemail").val();
+			var arg = {};
+			arg["username"] = _username;
+			arg["password"] = _password;
+			arg["confirmpassword"] = _confirmpassword;
+			arg["email"] = _email;
+			$.post("/Main/checkRegister", arg, function (data) {
+				if (data.state == "Error") {
+					var added = "<div class=\"calert alert alert-danger alert-dismissible fade in\" role=\"alert\">\n" +
+					"<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
+					"<Font size=2><strong>" + data.error + "</strong></FONT> \n" +
+					"</div>";
+					$("#view").prepend(added);
+					$("#register").removeClass("disabled");
+					iia = false;
+				} else if (data.state == "Success") {
+					window.location = "/Main/Login";
+					alert("注册成功！");
 
-			var added = "<div class=\"calert alert alert-danger alert-dismissible fade in\" role=\"alert\">\n" +
-			"<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\n" +
-			"<strong>注册失败！请确保账号和密码格式正确</strong> \n" +
-			"</div>";
-			$("#view").prepend(added);
+				}
+			}, "json");
 
 		});
 

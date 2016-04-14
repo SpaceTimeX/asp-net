@@ -392,6 +392,7 @@ UE.I18N['zh-cn'] = {
         'emptyFile':'空文件无法上传！',
         'fileTypeError':'文件类型不允许！',
         'unknownError':'未知错误！',
+		'noflags':'没有权限！',
         'fileUploading':'上传中，请等待……',
         'cancelUpload':'取消上传',
         'netError':'网络错误',

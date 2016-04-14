@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.IDname - 浏览帖子</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="~/sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		.active-extra1 {
+			background-color: #277D6D !important;
+			border-color: #277D6D !important;
+		}
+
+		body {
+			width: 1024px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.active-extra2 {
+			background-color: #5E2265 !important;
+			border-color: #5E2265 !important;
+		}
+
+		.about {
+			position: relative;
+			margin-left: auto;
+			margin-right: auto;
+			color: black;
+			text-align: center;
+		}
+
+		.btn-longer {
+			width: 100px !important;
+		}
+
+		.input-longer {
+			width: 200px !important;
+		}
+
+		.badge-extra1 {
+			background-color: #452BAB !important;
+		}
+
+		.btnex {
+			margin-top: 7px;
+		}
+
+		.dropex {
+			margin-right: 35px;
+		}
+
+		.dropdown-menu > .activeex > a, .dropdown-menu > .activeex > a:hover, .dropdown-menu > .activeex > a:focus {
+			background-color: #E74C3C !important;
+			color: #FFFFFF !important;
+		}
+
+		.dropdown-menu > .activeexout > a, .dropdown-menu > .activeexout > a:hover, .dropdown-menu > .activeexout > a:focus {
+			background-color: #791ECC !important;
+			color: #FFFFFF !important;
+		}
+
+		.rightex1 {
+			position: absolute;
+			right: 140px;
+			top: 0px;
+		}
+
+		.rightex2 {
+			position: absolute;
+			right: 10px;
+			top: 0px;
+		}
+
+		.widthex {
+			min-width: 120px !important;
+		}
+	</style>
+</head>
+<body>
+
+
+	<nav class="navbar navbar-default" style="margin-left:5%;margin-right:5%">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="~/Main">主城</a>
+			</div>
+
+			<div>
+				<form class="navbar-form navbar-left collapse navbar-collapse" role="search" action="/Main/Search">
+					<div class="form-group">
+						<input type="text" class="form-control input-longer" placeholder="Powered By SpaceTimeX">
+					</div>
+					<button type="submit" class="btn btn-default btn-longer">搜索</button>
+				</form>
+
+				<div class="btn-group rightex1">
+					<button class="btn btn-primary btnex dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						@{if (ViewBag.Prefix == "无")
+							{ @ViewBag.Username }
+							else {<span class="label label-warning" style="margin-right:5px;">@ViewBag.Prefix</span>@ViewBag.Username} } @if (ViewBag.UserMessages > 0)
+							{<span id="usermessages"><span class="badge">@ViewBag.UserMessages</span></span>}
+							<span class="glyphicon glyphicon-menu-down"></span>
+						</button>
+						<ul class="dropdown-menu dropex widthex" role="menu">
+							<li><a href="#">头衔：@ViewBag.Rank</a></li>
+							<li><a href="#">金币：@ViewBag.Coins</a></li>
+							<li><a href="#">威望：@ViewBag.Prestige</a></li>
+							<li><a href="#">积分：@ViewBag.Point</a></li>
+							<li><a href="#">升级还需：@(iConf.GetLeastPoints(long.Parse((ViewBag.Point).ToString())).ToString()) 积分</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeex"><a href="~/Main/Home">进入空间</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeexout"><a href="~/Main/Logout">登出 - 出城</a></li>
+						</ul>
+					</div>
+					@{
+						string signdate = Conf.Users[ViewBag.Username].SignedTime;
+						string nowdate = DateTime.Now.ToString("yyyy-MM-dd");
+						string tool = "danger"; string tip = "签到";
+						if (signdate == nowdate) { tool = "info"; tip = "已签到"; }
+					}
+					<button class="btn btn-@tool btnex rightex2" style="width:120px;" id="sign" type="submit" onclick="sign()">@tip</button>
+				</div>
+
+			</div>
+		</nav>
+		<form method="post" action="~/Main/Post">
+			<input type="hidden" name="id" value="@ViewBag.ID">
+			<button class="btn btn-primary" style="width:120px;margin-left:5%;" id="post" type="submit">发帖</button>
+
+			<div class="btn-group">
+				<button class="btn btn-primary" style="width:120px;margin-left:20px;" dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="postvote">发起...<span class="glyphicon glyphicon-menu-down"></span>&nbsp;</button>
+				<ul class="dropdown-menu dropex widthex" role="menu">
+					<li><a href="#">投票</a></li>
+					<li><a href="#">交易</a></li>
+				</ul>
+			</div><br />
+		</form>
+		<div class="panel panel-default" style="margin-left:5%;margin-right:5%;margin-top:20px;">
+			<!-- Default panel contents -->
+			<ol class="panel-heading breadcrumb">
+				<li><a href="~/Main/">主城</a></li>
+				<li><a href="~/Main/">@ViewBag.Block</a></li>
+				<li class="active">@ViewBag.IDname</li>
+			</ol>
+
+			<div class="panel-body">
+				<p>@ViewBag.AreaNote</p>
+			</div>
+
+			<!-- Table -->
+			<table class="table">
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>作者</th>
+						<th>最后回复</th>
+					</tr>
+				</thead>
+				<tbody>
+					@using CardWarWEB
+					@foreach (int i in Conf.AreaThreads[(int)ViewBag.ID])
+					{
+						PostThread Thread = Conf.Threads[i];
+						string Author = Thread.Username;
+						string ThreadName = Thread.Title;
+						PostThread getlast = Conf.Threads.ElementAt(Conf.Threads.Count - 1).Value;
+						string LastAuthor = getlast.Username;
+						string LastTime = getlast.Time;
+						<tr>
+							<td><a href="~/Main/ViewThread/@i.ToString()" class="list-group-item"><strong>@ThreadName</strong></a></td>
+							<td style="vertical-align:middle;"><a href="~/Main/Home?vu=@Author">@Author</a></td>
+							<td style="vertical-align:middle;"><a href="~/Main/Home?vu=@LastAuthor" class="badge">@LastAuthor<br />@LastTime</a></td>
+						</tr>
+					}
+
+				</tbody>
+			</table>
+			<iframe id="tmp_downloadhelper_iframe" style="display: none;"></iframe>
+		</div>
+		<script src="~/sRaw/ui/js/jquery.min.js"></script>
+		<script src="~/sRaw/ui/js/video.js"></script>
+		<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+		<script src="~/sRaw/ui/js/prettify.js"></script>
+		<script src="~/sRaw/ui/js/application.js"></script>
+		<script src="~/sRaw/ui/js/sign.js"></script>
+		<script>
+
+
+		</script>
+	</body>
+</html>

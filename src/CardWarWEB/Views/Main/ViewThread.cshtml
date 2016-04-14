@@ -1,0 +1,230 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.IDname - 浏览帖子</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="~/sRaw/ui/css/flat-ui.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		.active-extra1 {
+			background-color: #277D6D !important;
+			border-color: #277D6D !important;
+		}
+
+		.active-extra2 {
+			background-color: #5E2265 !important;
+			border-color: #5E2265 !important;
+		}
+
+		body {
+			width: 1024px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.about {
+			position: relative;
+			margin-left: auto;
+			margin-right: auto;
+			color: black;
+			text-align: center;
+		}
+
+		.btn-longer {
+			width: 100px !important;
+		}
+
+		.input-longer {
+			width: 200px !important;
+		}
+
+		.badge-extra1 {
+			background-color: #452BAB !important;
+		}
+
+		.btnex {
+			margin-top: 7px;
+		}
+
+		.dropex {
+			margin-right: 35px;
+		}
+
+		.dropdown-menu > .activeex > a, .dropdown-menu > .activeex > a:hover, .dropdown-menu > .activeex > a:focus {
+			background-color: #E74C3C !important;
+			color: #FFFFFF !important;
+		}
+
+		.dropdown-menu > .activeexout > a, .dropdown-menu > .activeexout > a:hover, .dropdown-menu > .activeexout > a:focus {
+			background-color: #791ECC !important;
+			color: #FFFFFF !important;
+		}
+
+		.rightex1 {
+			position: absolute;
+			right: 140px;
+			top: 0px;
+		}
+
+		.rightex2 {
+			position: absolute;
+			right: 10px;
+			top: 0px;
+		}
+
+		.widthex {
+			min-width: 120px !important;
+		}
+
+		.posttime {
+			position: relative;
+			float: right;
+			margin-top:5px;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default" style="margin-left:5%;margin-right:5%">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="~/Main">主城</a>
+			</div>
+
+			<div>
+				<form class="navbar-form navbar-left collapse navbar-collapse" role="search" action="/Main/Search">
+					<div class="form-group">
+						<input type="text" class="form-control input-longer" placeholder="Powered By SpaceTimeX">
+					</div>
+					<button type="submit" class="btn btn-default btn-longer">搜索</button>
+				</form>
+
+				<div class="btn-group rightex1">
+					<button class="btn btn-primary btnex dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						@{if (ViewBag.Prefix == "无")
+							{ @ViewBag.Username }
+							else {<span class="label label-warning" style="margin-right:5px;">@ViewBag.Prefix</span>@ViewBag.Username} } @if (ViewBag.UserMessages > 0)
+							{<span id="usermessages"><span class="badge">@ViewBag.UserMessages</span></span>}
+							<span class="glyphicon glyphicon-menu-down"></span>
+						</button>
+						<ul class="dropdown-menu dropex widthex" role="menu">
+							<li><a href="#">头衔：@ViewBag.Rank</a></li>
+							<li><a href="#">金币：@ViewBag.Coins</a></li>
+							<li><a href="#">威望：@ViewBag.Prestige</a></li>
+							<li><a href="#">积分：@ViewBag.Point</a></li>
+							<li><a href="#">升级还需：@(iConf.GetLeastPoints(long.Parse((ViewBag.Point).ToString())).ToString()) 积分</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeex"><a href="~/Main/Home">进入空间</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeexout"><a href="~/Main/Logout">登出 - 出城</a></li>
+						</ul>
+					</div>
+					@{
+						string signdate = Conf.Users[ViewBag.Username].SignedTime;
+						string nowdate = DateTime.Now.ToString("yyyy-MM-dd");
+						string tool = "danger"; string tip = "签到";
+						if (signdate == nowdate) { tool = "info"; tip = "已签到"; }
+					}
+					<button class="btn btn-@tool btnex rightex2" style="width:120px;" id="sign" type="submit" onclick="sign()">@tip</button>
+				</div>
+
+			</div>
+		</nav>
+		<ol class="panel-heading breadcrumb" style="margin-left:5%;margin-right:5%;">
+			<li><a href="~/Main/">主城</a></li>
+			<li><a href="~/Main/">@ViewBag.Block</a></li>
+			<li><a href="~/Main/ViewThreads/@ViewBag.ID">@ViewBag.IDname</a></li>
+			<li class="active">@ViewBag.ThreadTitle</li>
+		</ol>
+		<form method="post" action="~/Main/Reply">
+			<input type="hidden" name="id" value="@ViewBag.ThreadID">
+			<button class="btn btn-primary" style="width:120px;margin-left:5%;" id="post2" type="submit">回复</button>
+		</form>
+		<div id="contnet">
+			@using CardWarWEB
+			<div class="panel panel-primary" style="margin-left:5%;margin-right:5%;margin-top:20px;">
+				@{
+					string upusername = Conf.Threads[int.Parse(ViewBag.ThreadID)].Username;
+					string rank = Conf.Users[upusername].Rank;
+					int prefirxid = (int)Conf.Users[upusername].PrefixID;
+					
+				}
+				<div class="panel-heading"><span class="badge" style="margin-right:10px;">楼主<br />@rank</span><strong><a href="~/Main/Home?vu=@upusername" style="font-size:13px;color:white">@upusername</a></strong>@if(prefirxid != -1) {<span class="label label-danger" style="margin-left:10px">@(Conf.Users[upusername].Prefix[prefirxid])</span>}<span class="posttime badge">@Conf.Threads[int.Parse(ViewBag.ThreadID)].Time</span></div>
+				<div class="panel-body">
+					@(new HtmlString(Conf.Threads[int.Parse(ViewBag.ThreadID)].Content))
+				</div>
+			</div>
+			@{
+				Dictionary<int,List<int>> ThreadsContents = Conf.ThreadReplys;
+				int i = 2;
+			}
+			@foreach (int ic in ThreadsContents[int.Parse(ViewBag.ThreadID)])
+			{
+				PostReply pr = Conf.Replys[ic];
+				string floor = "";
+				if (i == 2)
+				{
+					floor = "沙发";
+				}
+				else if (i == 3)
+				{
+					floor = "板凳";
+				}
+				else {
+					floor = i + "楼";
+				}
+				rank = Conf.Users[pr.Username].Rank;
+				int prefixidi = (int)Conf.Users[pr.Username].PrefixID;
+				<div class="panel panel-success" style="margin-left:5%;margin-right:5%;margin-top:20px;">
+					<div class="panel-heading"><span class="badge" style="margin-right:10px;">@floor<br />@rank</span><strong><a href="~/Main/Home?vu=@pr.Username" style="font-size:13px;color:black">@pr.Username</a></strong>@if (prefixidi != -1){<span class="label label-danger" style="margin-left:10px">@(Conf.Users[pr.Username].Prefix[prefixidi])</span>}<span class="posttime badge">@pr.Time</span></div>
+					<div class="panel-body">
+						@(new HtmlString(@pr.Content))
+					</div>
+				</div>
+				i++;
+			}
+		</div>
+		<form method="post" action="~/Main/Reply">
+			<input type="hidden" name="id" value="@ViewBag.ThreadID">
+			<button class="btn btn-primary" style="width:120px;margin-left:5%;margin-bottom:20px;" id="post2" type="submit">回复</button>
+		</form>
+		<script>
+			window.onload = function () {
+				var maxwidth = $(window).width() - 60;
+				var cont = $("img");
+				cont.each(function () {
+					var width = $(this).width();
+					if (width > maxwidth)
+						$(this).css("width", "100%");
+				});
+			}
+
+			window.onresize = function () {
+				var maxwidth = $(window).width() - 60;
+				var cont = $("img");
+				cont.each(function () {
+					var width = $(this).width();
+					if (width > maxwidth)
+						$(this).css("width", "100%");
+					else
+						$(this).css("width", "");
+				});
+
+			}
+
+		</script>
+		<script src="~/sRaw/ui/js/jquery.min.js"></script>
+		<script src="~/sRaw/ui/js/video.js"></script>
+		<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+		<script src="~/sRaw/ui/js/prettify.js"></script>
+		<script src="~/sRaw/ui/js/application.js"></script>
+		<script src="~/sRaw/ui/js/sign.js"></script>
+	</body>
+</html>

@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@(ViewBag.Username)的个人空间 - 设置个人信息</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="~/sRaw/ui/css/flat-ui.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		.active-extra1 {
+			background-color: #277D6D !important;
+			border-color: #277D6D !important;
+		}
+
+		body {
+			width: 1024px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.active-extra2 {
+			background-color: #5E2265 !important;
+			border-color: #5E2265 !important;
+		}
+
+		.about {
+			position: relative;
+			margin-left: auto;
+			margin-right: auto;
+			color: black;
+			text-align: center;
+		}
+
+		.btn-longer {
+			width: 100px !important;
+		}
+
+		.input-longer {
+			width: 200px !important;
+		}
+
+		.badge-extra1 {
+			background-color: #452BAB !important;
+		}
+
+		.btnex {
+			margin-top: 7px;
+		}
+
+		.dropex {
+			margin-right: 35px;
+		}
+
+		.dropdown-menu > .activeex > a, .dropdown-menu > .activeex > a:hover, .dropdown-menu > .activeex > a:focus {
+			background-color: #E74C3C !important;
+			color: #FFFFFF !important;
+		}
+
+		.dropdown-menu > .activeexout > a, .dropdown-menu > .activeexout > a:hover, .dropdown-menu > .activeexout > a:focus {
+			background-color: #791ECC !important;
+			color: #FFFFFF !important;
+		}
+
+		.rightex1 {
+			position: absolute;
+			right: 140px;
+			top: 0px;
+		}
+
+		.rightex3 {
+			position: absolute;
+			right: 10px;
+			top: 0px;
+		}
+
+		.widthex {
+			min-width: 120px !important;
+		}
+
+		.rightex2 {
+			position: absolute;
+			right: 30px;
+			top: 165px;
+		}
+
+		.rightex4 {
+			position: relative;
+			float: right;
+			margin-top: -5px;
+			margin-bottom: -10px;
+		}
+	</style>
+</head>
+<body>
+	<nav class="navbar navbar-default" style="margin-left:5%;margin-right:5%">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="~/Main">主城</a>
+			</div>
+
+			<div>
+				<form class="navbar-form navbar-left collapse navbar-collapse" role="search" action="/Main/Search">
+					<div class="form-group">
+						<input type="text" class="form-control input-longer" placeholder="Powered By SpaceTimeX">
+					</div>
+					<button type="submit" class="btn btn-default btn-longer">搜索</button>
+				</form>
+
+				<div class="btn-group rightex1">
+					<button class="btn btn-primary btnex dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						@using CardWarWEB
+						@{ if (ViewBag.Prefix == "无")
+							{ @ViewBag.Username }
+							else {<span class="label label-warning" style="margin-right:5px;">@ViewBag.Prefix</span>@ViewBag.Username} } @if (ViewBag.UserMessages > 0)
+							{<span id="usermessages"><span class="badge">@ViewBag.UserMessages</span></span>}
+							<span class="glyphicon glyphicon-menu-down"></span>
+						</button>
+						<ul class="dropdown-menu dropex widthex" role="menu">
+							<li><a href="#">头衔：@ViewBag.Rank</a></li>
+							<li><a href="#">金币：@ViewBag.Coins</a></li>
+							<li><a href="#">威望：@ViewBag.Prestige</a></li>
+							<li><a href="#">积分：@ViewBag.Point</a></li>
+							<li><a href="#">升级还需：@(iConf.GetLeastPoints(long.Parse((ViewBag.Point).ToString())).ToString()) 积分</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeex"><a href="~/Main/Home">进入空间</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeexout"><a href="~/Main/Logout">登出 - 出城</a></li>
+						</ul>
+					</div>
+					@{
+						string signdate = Conf.Users[ViewBag.Username].SignedTime;
+						string nowdate = DateTime.Now.ToString("yyyy-MM-dd");
+						string tool = "danger"; string tip = "签到";
+						if (signdate == nowdate) { tool = "info"; tip = "已签到"; }
+					}
+					<button class="btn btn-@tool btnex rightex3" style="width:120px;" id="sign" type="submit" onclick="sign()">@tip</button>
+				</div>
+
+			</div>
+		</nav>
+		<ol class="panel-heading breadcrumb" style="margin-left:5%;margin-right:5%;">
+			<li><a href="~/Main/">主城</a></li>
+			<li class="active">个人空间</li>
+			<li><a href="~/Main/Home">@ViewBag.Username</a></li>
+			<li class="active">设置</li>
+		</ol>
+		<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+			<div class="panel-body">
+				<form method="get" action="~/Main/RtPssword">
+					<span>
+						我的个人信息
+
+						<button class="btn btn-primary rightex4" style="width:120px;margin-left:30px;" type="submit">重设密码</button>
+					</span>
+				</form>
+			</div>
+			<div class="panel-footer">
+				@{
+					string classn = "danger";
+					string outn = "未验证";
+				}
+				@if (ViewBag.IsCheckedEmail)
+				{
+					classn = "success";
+					outn = "已验证";
+				}
+
+				<span class="label label-primary">邮箱：</span><span class="label label-info" style="margin-left:10px;">@ViewBag.Email</span><span class="label label-@classn" style="margin-left:10px;margin-right:30px;">@outn</span>
+				<div class="input-group" style="margin-top:20px;">
+					<input type="text" class="form-control" placeholder="xxxxxxxxxx@xxx.com" value="@ViewBag.Email" id="nowemail">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit" id="reset">重设</button>
+						@if (!ViewBag.IsCheckedEmail)
+						{
+							<button class="btn btn-default" type="submit" id="resent">重发</button>
+						}
+
+					</span>
+				</div>
+				<br />
+				<span class="label label-primary">称号：</span><span class="label label-danger" style="margin-left:10px;">
+					@if (ViewBag.PrefixID == -1)
+					{
+						string s = "无";@s
+					}
+					else {
+						@ViewBag.Prefix
+					}
+				</span><br />
+				<div class="btn-group" style="width:100%;margin-bottom:20px;margin-top:10px;">
+					<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height:23px;line-height:0;">
+						<span id="showpre">@if (ViewBag.PrefixID == -1){string s = "选择其他称号";@s}else {@ViewBag.Prefix}</span><span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						@if (ViewBag.Prefixes <= 0)
+						{
+							<li><a href="#">没有称号！</a></li>
+						}
+						else {
+							int i = 0;
+							<li><a href="#" id="pre-none">无</a></li>
+							foreach (string s in (Conf.Users[ViewBag.Username].Prefix))
+							{
+								<li><a href="#" id="pre-@i">@s</a></li>
+								i++;
+							}
+						}
+
+					</ul>
+				</div>
+				<span class="label label-primary">个性签名：</span>
+				<input type="text" class="form-control" placeholder="个性签名" style="margin-top:10px;" id="stylesign" value="@ViewBag.StyleText">
+
+				<button class="btn btn-primary" style="width:120px;margin-top:30px;" type="submit" id="apply">应用</button>
+			</div>
+		</div>
+
+		<script src="~/sRaw/ui/js/jquery.min.js"></script>
+		<script src="~/sRaw/ui/js/video.js"></script>
+		<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+		<script src="~/sRaw/ui/js/prettify.js"></script>
+		<script src="~/sRaw/ui/js/application.js"></script>
+		<script src="~/sRaw/ui/js/sign.js"></script>
+		<script>
+			$("#apply").click(function () {
+				var stylesign = $("#stylesign").val();
+				var cprefix = $("#showpre").text();
+				var post = {};
+				post["stylesign"] = stylesign;
+				post["showpre"] = cprefix;
+				$.post("/Main/Apply", post, function (data) {
+					if (data.state == "Error") {
+						alert(data.error);
+					} else if (data.state == "Success") {
+						alert(data.error);
+						location.reload();
+					}
+				}, "json");
+
+			});
+			@if (ViewBag.Prefixes > 0)
+			{
+				string ss = "$(\"#pre-none\").click(function(){$(\"#showpre\").text(\"无\");});";@(new HtmlString(ss))
+
+
+				int i = 0;
+				@foreach (string s in (Conf.Users[ViewBag.Username].Prefix))
+				{
+					string str = "$(\"#pre-" + i + "\").click(function(){ var text = \""+s+"\"; $(\"#showpre\").text(text); });";
+					@(new HtmlString(str))
+
+					i++;
+				}
+			}
+
+			$("#reset").click(function () {
+				if (window.confirm("修改邮箱将会重置验证状态，确认吗？")) {
+					var remail = $("#nowemail").val();
+					var post = {};
+					post["remail"] = remail;
+					$.post("/Main/ResetEmail", post, function (data) {
+						if (data == "Error") {
+							alert("修改失败！");
+						} else {
+							alert("修改成功！");
+							location.reload();
+						}
+					});
+
+				}
+			});
+
+			var iis = false;
+			$("#resent").click(function () {
+				if (iis) return;
+				iis = true;
+				$("#resent").addClass("disabled");
+				$.post("/Main/Resend", function (data) {
+					iis = false;
+					$("#resent").removeClass("disabled");
+					if (data == "Error") {
+						alert("发送失败！");
+					} else {
+						alert("发送成功！");
+						location.reload();
+					}
+				});
+			});
+
+
+		</script>
+	</body>
+</html>

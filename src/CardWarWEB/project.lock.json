@@ -3,6 +3,17 @@
   "version": 2,
   "targets": {
     "DNX,Version=v4.5.1": {
+      "AntiXSS/4.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        }
+      },
       "EntityFramework.Core/7.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -1720,6 +1731,17 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x86": {
+      "AntiXSS/4.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        }
+      },
       "EntityFramework.Core/7.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -3440,6 +3462,17 @@
       }
     },
     "DNX,Version=v4.5.1/win7-x64": {
+      "AntiXSS/4.3.0": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AntiXssLibrary.dll": {},
+          "lib/net40/HtmlSanitizationLibrary.dll": {}
+        }
+      },
       "EntityFramework.Core/7.0.0-rc1-final": {
         "type": "package",
         "dependencies": {
@@ -5161,6 +5194,25 @@
     }
   },
   "libraries": {
+    "AntiXSS/4.3.0": {
+      "type": "package",
+      "sha512": "NDEKu4wmQ109bbreNetddmufZU6gPDhVKqX+FqGiMylektPOQB+lPTtuZre41tcDLGHG7ju8z0PPZubrv4z9QQ==",
+      "files": [
+        "AntiXSS.4.3.0.nupkg",
+        "AntiXSS.4.3.0.nupkg.sha512",
+        "AntiXSS.nuspec",
+        "lib/net20/AntiXssLibrary.dll",
+        "lib/net20/AntiXssLibrary.xml",
+        "lib/net35/AntiXssLibrary.dll",
+        "lib/net35/AntiXssLibrary.xml",
+        "lib/net35/HtmlSanitizationLibrary.dll",
+        "lib/net35/HtmlSanitizationLibrary.xml",
+        "lib/net40/AntiXssLibrary.dll",
+        "lib/net40/AntiXssLibrary.xml",
+        "lib/net40/HtmlSanitizationLibrary.dll",
+        "lib/net40/HtmlSanitizationLibrary.xml"
+      ]
+    },
     "EntityFramework.Core/7.0.0-rc1-final": {
       "type": "package",
       "serviceable": true,
@@ -7118,8 +7170,12 @@
       "Microsoft.AspNet.Identity >= 3.0.0-rc1-final",
       "Newtonsoft.Json >= 8.0.3",
       "Microsoft.AspNet.Http.Extensions >= 1.0.0-rc1-final",
-      "Microsoft.AspNet.WebUtilities >= 1.0.0-rc1-final"
+      "Microsoft.AspNet.WebUtilities >= 1.0.0-rc1-final",
+      "AntiXSS >= 4.3.0"
     ],
-    "DNX,Version=v4.5.1": []
+    "DNX,Version=v4.5.1": [
+      "fx/System.Data.Linq >= 4.0.0",
+      "fx/System.Web >= 4.0.0"
+    ]
   }
 }

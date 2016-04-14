@@ -1,1 +1,1 @@
-git pull https://github.com/SpaceTimeX/asp-net.git master
+git pull https://git.oschina.net/mainspace/asp-net.git master

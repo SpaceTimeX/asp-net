@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Threading;
 
 namespace CardWarWEB
 {
@@ -60,7 +61,8 @@ namespace CardWarWEB
                 { ".rar","application/octet-stream"},
                 { ".7z","application/octet-stream"},
                 { ".zip","application/zip"},
-                { ".ico","application/octet-stream"}
+                { ".ico","application/octet-stream"},
+                { ".map","application/octet-stream"}
 
             };
 
@@ -92,7 +94,7 @@ namespace CardWarWEB
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action}/{id?}",
+                    template: "{controller}/{action}",
                     defaults: new { controller = "Welcome", action = "Index" });
 
             });
@@ -104,29 +106,150 @@ namespace CardWarWEB
                 {
                     FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
-                    Conf.UserConf = (Dictionary<string, Dictionary<string, string>>)bf.Deserialize(fs);
+                    Conf.Users = (Dictionary<string, UserConfig>)bf.Deserialize(fs);
+                    fs.Close();
                 }
                 else {
                     FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
-                    bf.Serialize(fs, Conf.UserConf);
+                    bf.Serialize(fs, Conf.Users);
+                    fs.Close();
+                }
+
+                if (File.Exists("/v/Threads.data"))
+                {
+                    FileStream fs = new FileStream("/v/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Threads = (Dictionary<int, PostThread>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Threads);
+                    fs.Close();
+                }
+
+                if (File.Exists("/v/Replys.data"))
+                {
+                    FileStream fs = new FileStream("/v/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Replys = (Dictionary<int, PostReply>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Replys);
+                    fs.Close();
+                }
+
+                if (File.Exists("/v/ThreadReplys.data"))
+                {
+                    FileStream fs = new FileStream("/v/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.ThreadReplys = (Dictionary<int, List<int>>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.ThreadReplys);
+                    fs.Close();
+                }
+
+                if (File.Exists("/v/Emails.data"))
+                {
+                    FileStream fs = new FileStream("/v/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Emails = (List<string>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Emails);
+                    fs.Close();
                 }
             }
             else
             {
-                Directory.CreateDirectory(Server.GetWebRootPath() + "/Users");
-                if (File.Exists(Server.GetWebRootPath() + "/Users.data"))
+                Directory.CreateDirectory(Server.GetApplicationBasePath() + "/Users");
+                if (File.Exists(Server.GetApplicationBasePath() + "/Users.data"))
                 {
-                    FileStream fs = new FileStream(Server.GetWebRootPath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
-                    Conf.UserConf = (Dictionary<string, Dictionary<string, string>>)bf.Deserialize(fs);
+                    Conf.Users = (Dictionary<string, UserConfig>)bf.Deserialize(fs);
+                    fs.Close();
                 }
                 else {
-                    FileStream fs = new FileStream(Server.GetWebRootPath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
-                    bf.Serialize(fs, Conf.UserConf);
+                    bf.Serialize(fs, Conf.Users);
+                    fs.Close();
                 }
+
+                if (File.Exists(Server.GetApplicationBasePath() + "/ThreadsName.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadsName.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Threads = (Dictionary<int, PostThread>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadsName.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Threads);
+                    fs.Close();
+                }
+
+
+                if (File.Exists(Server.GetApplicationBasePath() + "/ReplysContents.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ReplysContents.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Replys = (Dictionary<int, PostReply>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ReplysContents.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Replys);
+                    fs.Close();
+                }
+
+                if (File.Exists(Server.GetApplicationBasePath() + "/ThreadReplys.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.ThreadReplys = (Dictionary<int, List<int>>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.ThreadReplys);
+                    fs.Close();
+                }
+
+
+                if (File.Exists(Server.GetApplicationBasePath() + "/Emails.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.Emails = (List<string>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.Emails);
+                    fs.Close();
+                }
+
             }
+
+
         }
     }
 }

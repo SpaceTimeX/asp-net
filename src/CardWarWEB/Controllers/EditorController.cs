@@ -43,6 +43,31 @@ namespace CardWarWEB.Controllers
         private string[] FileList;
         private string[] SearchExtensions;
 
+        private bool CheckLogin()
+        {
+
+            if (string.IsNullOrEmpty(Request.Cookies["username"]) || string.IsNullOrEmpty(Request.Cookies["password"]))
+                return false;
+            else {
+                string username = Request.Cookies["username"];
+                string password = Request.Cookies["password"];
+                if (!Conf.Users.ContainsKey(username))
+                    return false;
+                else {
+                    string md5_password = Conf.Users[username].Password;
+                    if (password.ToUpper() == md5_password.ToUpper())
+                    {
+                        List<string> flags = Conf.Users[username].Flags;
+                        if (flags.Contains("login"))
+                            return true;
+                        else
+                            return false;
+                    }
+                    else
+                        return false;
+                }
+            }
+        }
 
         [Route("Editor")]
         public object Editor()
@@ -52,6 +77,14 @@ namespace CardWarWEB.Controllers
                 return "Error";
             }
 
+            if (!CheckLogin()) {
+
+                Server.RemoveCookie(this, "username");
+                Server.RemoveCookie(this, "password");
+                return "Error";
+            }
+            string username = Request.Cookies["username"];
+            List<string> flags = Conf.Users[username].Flags;
             string R = Request.Query["action"];
             if (R == "config")
             {
@@ -110,6 +143,24 @@ namespace CardWarWEB.Controllers
 
                 var originalName = parsedContentDisposition.FileName.Replace("\"", "");
                 uploadFileName = originalName;
+                if (R == "uploadfile")
+                {
+                    if (!flags.Contains("uploadfile"))
+                    {
+                        Result.State = UploadState.NoFileFlag;
+                        WriteResult(Result);
+                        return "";
+                    }
+                }
+                if (R == "uploadimage")
+                {
+                    if (!flags.Contains("uploadimage"))
+                    {
+                        Result.State = UploadState.NoImageFlag;
+                        WriteResult(Result);
+                        return "";
+                    }
+                }
                 if (!CheckFileType(uploadFileName))
                 {
                     Result.State = UploadState.TypeNotAllow;
@@ -379,6 +430,10 @@ namespace CardWarWEB.Controllers
                     return "不允许的文件格式";
                 case UploadState.NetworkError:
                     return "网络错误";
+                case UploadState.NoFileFlag:
+                    return "没有上传文件权限！";
+                case UploadState.NoImageFlag:
+                    return "没有上传图片权限！";
             }
             return "未知错误";
         }
@@ -445,6 +500,8 @@ namespace CardWarWEB.Controllers
         FileAccessError = -3,
         NetworkError = -4,
         Unknown = 1,
+        NoFileFlag = -5,
+        NoImageFlag = -6
     }
 
     public class Crawler

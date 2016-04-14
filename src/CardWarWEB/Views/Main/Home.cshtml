@@ -1,0 +1,662 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@(ViewBag.ViewUsername)的个人空间</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+	<!-- Loading Flat UI -->
+	<link href="~/sRaw/ui/css/flat-ui.css" rel="stylesheet">
+	<link href="~/sRaw/ui/css/titatoggle-dist-min.css" rel="stylesheet">
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		.active-extra1 {
+			background-color: #277D6D !important;
+			border-color: #277D6D !important;
+		}
+
+		body {
+			width: 1024px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		.active-extra2 {
+			background-color: #5E2265 !important;
+			border-color: #5E2265 !important;
+		}
+
+		.about {
+			position: relative;
+			margin-left: auto;
+			margin-right: auto;
+			color: black;
+			text-align: center;
+		}
+
+		.btn-longer {
+			width: 100px !important;
+		}
+
+		.input-longer {
+			width: 200px !important;
+		}
+
+		.badge-extra1 {
+			background-color: #452BAB !important;
+		}
+
+		.btnex {
+			margin-top: 7px;
+		}
+
+		.dropex {
+			margin-right: 35px;
+		}
+
+		.dropdown-menu > .activeex > a, .dropdown-menu > .activeex > a:hover, .dropdown-menu > .activeex > a:focus {
+			background-color: #E74C3C !important;
+			color: #FFFFFF !important;
+		}
+
+		.dropdown-menu > .activeexout > a, .dropdown-menu > .activeexout > a:hover, .dropdown-menu > .activeexout > a:focus {
+			background-color: #791ECC !important;
+			color: #FFFFFF !important;
+		}
+
+		.rightex1 {
+			position: absolute;
+			right: 140px;
+			top: 0px;
+		}
+
+		.rightex3 {
+			position: absolute;
+			right: 10px;
+			top: 0px;
+		}
+
+		.widthex {
+			min-width: 120px !important;
+		}
+
+		.rightex2 {
+			position: absolute;
+			right: 30px;
+			top: 165px;
+		}
+
+		.rightex4 {
+			position: relative;
+			float: right;
+			margin-top: -5px;
+			margin-bottom: -10px;
+		}
+
+		.rightex5 {
+			position: relative;
+			float: right;
+		}
+
+		.dropfile {
+			width: 100%;
+			height: 100px;
+			border: 3px dashed silver;
+			line-height: 100px;
+			text-align: center;
+			font-size: 36px;
+			color: #d3d3d3;
+		}
+	</style>
+</head>
+<body>
+	@{ string sssssss = "TA";}
+	@if (ViewBag.Username == ViewBag.ViewUsername)
+	{
+		sssssss = "我";
+	}
+	else {
+		sssssss = "TA";
+	}
+	<nav class="navbar navbar-default" style="margin-left:5%;margin-right:5%">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<a class="navbar-brand" href="~/Main">主城</a>
+			</div>
+
+			<div>
+				<form class="navbar-form navbar-left collapse navbar-collapse" role="search" action="/Main/Search">
+					<div class="form-group">
+						<input type="text" class="form-control input-longer" placeholder="Powered By SpaceTimeX">
+					</div>
+					<button type="submit" class="btn btn-default btn-longer">搜索</button>
+				</form>
+
+				<div class="btn-group rightex1">
+					<button class="btn btn-primary btnex dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						@{if (ViewBag.Prefix == "无")
+							{ @ViewBag.Username }
+							else {<span class="label label-warning" style="margin-right:5px;">@ViewBag.Prefix</span>@ViewBag.Username} } @if (ViewBag.UserMessages > 0)
+							{<span id="usermessages"><span class="badge">@ViewBag.UserMessages</span></span>}
+							<span class="glyphicon glyphicon-menu-down"></span>
+						</button>
+						<ul class="dropdown-menu dropex widthex" role="menu">
+							<li><a href="#">头衔：@ViewBag.Rank</a></li>
+							<li><a href="#">金币：@ViewBag.Coins</a></li>
+							<li><a href="#">威望：@ViewBag.Prestige</a></li>
+							<li><a href="#">积分：@ViewBag.Point</a></li>
+							<li><a href="#">升级还需：@(iConf.GetLeastPoints(long.Parse((ViewBag.Point).ToString())).ToString()) 积分</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeex"><a href="~/Main/Home">进入空间</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="activeexout"><a href="~/Main/Logout">登出 - 出城</a></li>
+						</ul>
+					</div>
+					@{
+						string signdate = Conf.Users[ViewBag.Username].SignedTime;
+						string nowdate = DateTime.Now.ToString("yyyy-MM-dd");
+						string tool = "danger"; string tip = "签到";
+						if (signdate == nowdate) { tool = "info"; tip = "已签到"; }
+					}
+					<button class="btn btn-@tool btnex rightex3" style="width:120px;" id="sign" type="submit" onclick="sign()">@tip</button>
+				</div>
+
+			</div>
+		</nav>
+		<ol class="panel-heading breadcrumb" style="margin-left:5%;margin-right:5%;">
+			<li><a href="~/Main/">主城</a></li>
+			<li class="active">个人空间</li>
+			<li><a href="~/Main/Home?vu=@ViewBag.ViewUsername">@ViewBag.ViewUsername</a></li>
+		</ol>
+		<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+			<div class="panel-body">
+				<form method="get" action="~/Main/Own">
+					<span>@(sssssss)的个人信息<button class="btn btn-primary rightex4" style="width:120px;margin-left:30px;" type="submit">设置我的信息</button></span>
+				</form>
+			</div>
+			<div class="panel-footer">
+				@using CardWarWEB
+				<span class="label label-primary">账号：</span><span class="label label-danger" style="margin-left:10px;">@ViewBag.ViewUsername</span>
+				@if (Conf.Admins.Contains(ViewBag.ViewUsername))
+				{ <span class="label label-primary" style="margin-left:10px;">管理员</span>}
+				<br />
+				@{ string prefix = "无";
+					int prefixid = Conf.Users[ViewBag.ViewUsername].PrefixID;
+					if (prefixid == -1)
+					{
+						prefix = "无";
+					}
+					else {
+						prefix = Conf.Users[ViewBag.ViewUsername].Prefix[prefixid];
+					}
+				}
+				<span class="label label-info">称号：</span><span class="label label-danger" style="margin-left:10px;">@prefix</span><br />
+				@{
+					string rank = Conf.Users[ViewBag.ViewUsername].Rank;
+				}
+				<span class="label label-success">头衔：</span><span class="label label-danger" style="margin-left:10px;">@rank</span><br />
+				@{
+					string label1 = "danger";
+					string stats1 = "未签到";
+					if (nowdate == Conf.Users[ViewBag.ViewUsername].SignedTime)
+					{
+						label1 = "info";
+						stats1 = "已签到";
+					}
+				}
+				<span class="label label-primary">签到：</span><span class="label label-@label1" style="margin-left:10px;">@stats1</span><br />
+				@{
+					string styletext = Conf.Users[ViewBag.ViewUsername].StyleText;
+					if (styletext == "")
+					{
+						styletext = "TA还没有设置签名";
+					}
+				}
+				<span class="label label-warning">签名：</span><span class="label label-danger" style="margin-left:10px;">@styletext</span><br />
+				<span class="label label-success">邮箱：</span><span class="label label-danger" style="margin-left:10px;">@Conf.Users[ViewBag.ViewUsername].Email</span><br />
+				<span class="label label-default">金币：</span><span class="label label-danger" style="margin-left:10px;">@(Conf.Users[ViewBag.ViewUsername].Coin)</span><br />
+				<span class="label label-default">威望：</span><span class="label label-danger" style="margin-left:10px;">@(Conf.Users[ViewBag.ViewUsername].Prestige)</span><br />
+				<span class="label label-default">积分：</span><span class="label label-danger" style="margin-left:10px;">@(Conf.Users[ViewBag.ViewUsername].Point)</span><br />
+				<span class="label label-default">距离下一等级还需要积分：</span><span class="label label-danger" style="margin-left:10px;margin-bottom:20px;">@(iConf.GetLeastPoints(Conf.Users[ViewBag.ViewUsername].Point).ToString())</span><br />
+				@{
+					long nowt = Conf.Users[ViewBag.ViewUsername].Point;
+					long leastt = iConf.GetLeastPoints(nowt);
+					long allt = nowt + leastt;
+					string progress = string.Format("{0:F2}", (double)((double)nowt / (double)allt) * 100);
+					string viewprogress = string.Format("{0:F0}", (double)((double)nowt / (double)allt) * 100);
+				}
+
+				<div class="progress">
+					<div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" style="min-width: 2em;width: @(progress)%">
+						@viewprogress%
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default" style="margin-left:5%;margin-right:5%;margin-bottom:30px;">
+			<div class="panel-body">@(sssssss)的发帖/回复</div>
+			<div class="panel-footer">
+				<span class="label label-primary">发帖数量：</span><span class="label label-danger" style="margin-left:10px;">@(Conf.Users[ViewBag.ViewUsername].Threads.Count)</span><br />
+				<span class="label label-primary">回复数量：</span><span class="label label-danger" style="margin-left:10px;">@(Conf.Users[ViewBag.ViewUsername].Replys.Count)</span>
+				@{
+					List<int> postthreads = new List<int>(Conf.Users[ViewBag.ViewUsername].Threads);
+					List<int> postreplys = new List<int>(Conf.Users[ViewBag.ViewUsername].Replys);
+					postthreads = new List<int>(postthreads.Reverse<int>());
+					postreplys = new List<int>(postreplys.Reverse<int>());
+					bool isjump = false;
+				}
+				@if (postthreads.Count > 0)
+				{
+					<br /><br />
+					<span class="label label-warning">@(sssssss)的发帖</span>
+					<div class="list-group">
+						@{
+							int active = postthreads[0];
+							string threadname = Conf.Threads[active].Title;
+							int repls = Conf.ThreadReplys[active].Count;
+							string aidname = "";
+							int aareaid = -1;
+							foreach (int ni in Conf.AreaThreads.Keys)
+							{
+								List<int>
+									li = Conf.AreaThreads[ni];
+								if (li.Contains(active))
+								{
+									aidname = Conf.AreaName[ni];
+									aareaid = ni;
+
+
+									break;
+								}
+							}
+						}
+						<a href="~/Main/ViewThread/@active" class="list-group-item list-group-item-success">
+							<span class="badge">最新</span>
+							<span class="badge">@Conf.Blocks[aareaid]/@aidname<br />回复数：@repls</span>
+							@threadname
+						</a>
+						@foreach (int i in postthreads)
+						{
+							if (!isjump) { isjump = true; continue; }
+							string tthreadname = Conf.Threads[i].Title;
+							int trepls = Conf.ThreadReplys[i].Count;
+							string IDname = "";
+							int ID = -1;
+
+							foreach (int ni in Conf.AreaThreads.Keys)
+							{
+								List<int>
+									li = Conf.AreaThreads[ni];
+								if (li.Contains(i))
+								{
+									IDname = Conf.AreaName[ni];
+									ID = ni;
+									break;
+								}
+							}
+							<a href="~/Main/ViewThread/@i" class="list-group-item">
+								<span class="badge">@Conf.Blocks[ID]/@IDname<br />回复数：@repls</span>
+								@tthreadname
+							</a>
+						}
+
+					</div>
+							}
+				@if (postreplys.Count > 0)
+				{
+					<br />
+					<span class="label label-warning">@(sssssss)的回复</span>
+					<div class="list-group">
+						@{
+							isjump = false;
+							int active = postreplys[0];
+							string replyfirstcontent = Conf.Replys[active].Content;
+							string split = "\n";
+							if (replyfirstcontent.Contains("\r\n"))
+							{
+								split = "\r\n";
+							}
+							replyfirstcontent = replyfirstcontent.Split(new string[] { split }, StringSplitOptions.RemoveEmptyEntries)[0];
+							HtmlToText convert = new HtmlToText();
+							replyfirstcontent = convert.Convert(replyfirstcontent);
+							replyfirstcontent.Replace(split, "");
+							int threadid = Conf.Replys[active].Id;
+							string threadname = Conf.Threads[threadid].Title;
+							string tid = threadid.ToString();
+						}
+						<a href="~/Main/ViewThread/@tid" class="list-group-item list-group-item-success">
+							<span class="badge">最新</span>
+							<span class="badge">帖子标题<br />@threadname</span>
+							@replyfirstcontent
+						</a>
+						@foreach (int i in postreplys)
+						{
+							if (!isjump) { isjump = true; continue; }
+							string firstcontent = Conf.Replys[i].Content;
+							split = "\n";
+							if (firstcontent.Contains("\r\n"))
+							{
+								split = "\r\n";
+							}
+							firstcontent = firstcontent.Split(new string[] { split }, StringSplitOptions.RemoveEmptyEntries)[0];
+							convert = new HtmlToText();
+							firstcontent = convert.Convert(firstcontent);
+							firstcontent.Replace(split, "");
+							threadid = Conf.Replys[i].Id;
+							tid = threadid.ToString();
+							threadname = Conf.Threads[threadid].Title;
+							<a href="~/Main/ViewThread/@threadid" class="list-group-item">
+								<span class="badge">帖子标题<br />@threadname</span>
+								@firstcontent
+							</a>
+						}
+					</div>
+							}
+			</div>
+		</div>
+		@{
+
+			List<Message> messages = new List<Message>(Conf.Users[ViewBag.Username].Messages);
+
+			messages = new List<Message>(messages.Reverse<Message>());
+			bool ijump = false;
+
+		}
+		@{ int tic = 1; }
+		@if (ViewBag.Username == ViewBag.ViewUsername)
+		{
+			<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+				<div class="panel-body">
+					<form method="get" action="~/Main/SendMessage">
+						<span>
+							我的短信息
+							<button class="btn btn-primary rightex4" style="width:120px;margin-left:10px;" type="submit">发送短信息</button>
+							<button class="btn btn-primary rightex4" style="width:120px;margin-left:30px;" type="button" id="setallread">全部已读</button>
+						</span>
+					</form>
+				</div>
+				<div class="panel-footer">
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+						@if (messages.Count > 0)
+						{
+							Console.WriteLine("1");
+							Message icontent = messages[0];
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="htop">
+									<h4 class="panel-title">
+										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#mtop" aria-expanded="true" aria-controls="mtop" id="readtop">
+											<span class="badge">最新</span>
+											@if (!icontent.IsRead)
+											{
+												<span class="badge" id="nowreadtop">未读</span>
+}
+											else {
+												<span class="badge" id="nowreadtop">已读</span>
+}
+											<strong>@icontent.Title</strong>
+											<a href="~/Main/Home?vu=@icontent.FromUsername" class="badge rightex4">@icontent.FromUsername<br />@icontent.SendTime</a>
+										</a>
+									</h4>
+								</div>
+								<div id="mtop" class="panel-collapse collapse" role="tabpanel" aria-labelledby="htop">
+									<div class="panel-body">
+										@(new HtmlString(icontent.Content))
+									</div>
+								</div>
+							</div>
+
+						}
+						else {
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="htop">
+									<h4 class="panel-title">
+										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#mtop" aria-expanded="true" aria-controls="mtop">
+											<span class="badge">最新</span>
+											<strong>没有短信息</strong>
+											<span class="badge rightex4">时空之主<br />@DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")</span>
+										</a>
+									</h4>
+								</div>
+								<div id="mtop" class="panel-collapse collapse" role="tabpanel" aria-labelledby="htop">
+									<div class="panel-body">
+										这里什么也没有喔~~
+									</div>
+								</div>
+							</div>
+						}
+						@foreach (var o in messages)
+						{
+							if (!ijump) { ijump = true; continue; }
+							string u = o.FromUsername;
+							string time = o.SendTime;
+							string title = o.Title;
+							string content = o.Content;
+							bool isread = o.IsRead;
+							<div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="h-@tic">
+									<h4 class="panel-title">
+										<a role="button" data-toggle="collapse" data-parent="#accordion" href="#m-@tic" aria-expanded="true" aria-controls="m-@tic" id="read-@tic">
+											@if (!isread)
+											{<span class="badge" id="noread-@tic">未读</span>}
+											else {<span class="badge" id="noread-@tic">已读</span> }
+											<strong>@title</strong>
+											<a href="~/Main/Home?vu=@u" class="badge rightex4">@u<br />@time</a>
+										</a>
+									</h4>
+								</div>
+								<div id="m-@tic" class="panel-collapse collapse" role="tabpanel" aria-labelledby="h-@tic">
+									<div class="panel-body">
+										@(new HtmlString(@content))
+									</div>
+								</div>
+							</div>
+							tic++;
+						}
+
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+				<div class="panel-body">
+					我的权限
+				</div>
+				<div class="panel-footer">
+					@{
+						List<string> flags = Conf.Users[ViewBag.ViewUsername].Flags;
+					}
+					@foreach (string sr in Conf.Permissions.Keys)
+					{
+						string cs = Conf.Permissions[sr];
+						if (flags.Contains(sr))
+						{
+							<span class="label label-success">@cs</span>
+						}
+						else {
+							<span class="label label-danger">@cs</span>
+						}
+
+
+					}
+				</div>
+			</div>
+						bool isallow = Conf.Users[ViewBag.ViewUsername].AllowAllAmxxs;
+						Dictionary<string, AmxxHelper> ListAmxxs = Conf.Users[ViewBag.ViewUsername].Amxxs;
+
+						<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+							<div class="panel-body">
+								我的许可
+								@if (isallow)
+								{
+									<span class="label label-success rightex4" style="margin-top:5px;" id="lictype">最高许可</span>
+								}
+								else {
+									<span class="label label-warning rightex4" style="margin-top:5px;" id="lictype">需要许可</span>
+								}
+
+								<a href="./DownloadLic" class="label label-danger rightex4" style="margin-top:5px;margin-right:10px;">下载许可文件</a>
+								<a href="javascript:void(0)" class="label label-primary rightex4" style="margin-top:5px;margin-right:10px;" id="addlic">添加/更新许可</a>
+								<a href="javascript:void(0)" class="label label-success rightex4" style="margin-top:5px;margin-right:10px;" id="copylic">同步最新许可</a>
+								
+							</div>
+							<div class="panel-footer">
+								@if (ListAmxxs.Count > 0)
+								{
+									long now = Server.GetNow();
+									foreach (AmxxHelper amxxhelper in ListAmxxs.Values)
+									{
+										<span class="label label-primary">许可：@amxxhelper.AmxxName</span><span class="label label-info" style="margin-left:15px">MD5：@(amxxhelper.AmxxMD5.Substring(0, 8))......</span>
+										<span class="label label-warning" style="margin-left:15px">到期：@(Server.StampToDateTime(amxxhelper.TimeStamps).ToString("yyyy-MM-dd HH:mm:ss"))</span>
+										@if (now >= amxxhelper.TimeStamps)
+										{<span class="label label-danger" style="margin-left:15px">已过期</span> }
+										else { <span class="label label-success" style="margin-left:15px">未过期</span>}
+										@if (amxxhelper.isEnabled)
+										{<span class="label label-danger rightex5" style="margin-left:15px;margin-top:5px;">必须</span>}
+										else {<span class="label label-default rightex5" style="margin-left:15px;margin-top:5px;">任意</span> }<br />
+									}
+
+								}
+								else {<span class="label label-default">暂时没有任何许可！</span> }
+							</div>
+							<div id="inputcode" style="margin-top:20px;margin-left:10px;margin-right:10px;margin-bottom:10px;">
+								<input type="text" placeholder="输入授权码，相同的插件名会自动更新" class="input form-control" id="incode" style="width:100%;" />
+								<button class="btn btn-primary" id="incheck" style="width:120px;margin-top:10px;">确认</button>
+							</div>
+						</div>
+						}
+
+		@if (Conf.Admins.Contains(ViewBag.Username))
+		{
+			<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+				<div class="panel-body">
+					管理许可
+					<span class="label label-success rightex4" style="margin-top:5px;">管理员功能</span>
+				</div>
+				<div class="panel-footer">
+					<input type="text" placeholder="查询用户" class="input form-control" id="icuser" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" />
+					<button class="btn btn-primary" id="icsearch" style="width:120px;margin-left:10px;margin-bottom:15px">查询</button>
+					<div id="icframe" style="margin-left:10px;margin-right:10px">
+
+					</div>
+				</div>
+			</div>
+			<div id="undermiddle" style="margin-left:5%;margin-right:5%;"></div>
+			<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+				<div class="panel-body">
+					生成许可
+					<span class="label label-success rightex4" style="margin-top:5px;">管理员功能</span>
+				</div>
+				<div class="panel-footer">
+					<div id="choosecreate">
+						<a href="javascripf:void(0)" class="label label-info" style="margin-left:10px;" id="uploadf">选择文件生成</a><a href="javascripf:void(0)" class="label label-primary" style="margin-left:10px;" id="noneuploadf">手动填写生成</a><a href="javascripf:void(0)" class="label label-danger" style="margin-left:10px;" id="dragupload">拖动文件生成</a>
+					</div>
+					<div id="noneupload" style="margin-top:20px">
+						<input type="text" placeholder="插件名" class="input form-control" id="addlicname" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" />
+						<input type="text" placeholder="MD5" class="input form-control" id="addlicmd5" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" />
+						<input type="text" placeholder="到期时间 例：2050-1-1 00:00:00。0为永久" class="input form-control" id="addlitime" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" value="@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))" />
+						<div class="checkbox checkbox-slider--b-flat checkbox-slider-md" style="margin-left:10px;">
+							<label>
+								<input checked="" type="checkbox" id="open1"><span>开关</span>
+							</label>
+						</div>
+						<button class="btn btn-primary" id="licadd" style="width:120px;margin-left:10px;margin-bottom:15px">生成</button><br /><br />
+						<textarea type="text" placeholder="许可内容" class="input form-control" id="liccontent" style="margin-left:10px;margin-right:10px;width:100%;height:120px;resize:none"></textarea>
+					</div>
+					<div id="uploadff" style="margin-top:20px">
+						<input type="text" placeholder="到期时间 例：2050-1-1 00:00:00。0为永久" class="input form-control" id="uploadftime" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" value="@(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"))" />
+						<input type="file" placeholder="选择文件" class="form-control" id="fileupload" name="fileupload" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" />
+						<div class="checkbox checkbox-slider--b-flat checkbox-slider-md" style="margin-left:10px;">
+							<label>
+								<input checked="" type="checkbox" id="open2"><span>开关</span>
+							</label>
+						</div>
+						<button type="submit" class="btn btn-primary" id="fupload" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:120px;">上传</button>
+					</div>
+					<div id="draguploaddiv" style="margin-top:20px">
+						<div class="dropfile" id="dropfile">将文件拖拽到此区域</div>
+					</div>
+				</div>
+			</div>
+			<div id="undermiddledown" style="margin-left:5%;margin-right:5%;"></div>
+			<div class="panel panel-default" style="margin-left:5%;margin-right:5%;">
+				<div class="panel-body">
+					管理用户
+					<span class="label label-success rightex4" style="margin-top:5px;">管理员功能</span>
+				</div>
+				<div class="panel-footer">
+					<input type="text" placeholder="查询用户" class="input form-control" id="ccuser" style="margin-left:10px;margin-right:10px;margin-bottom:10px;width:100%;" />
+					<button class="btn btn-primary" id="ccsearch" style="width:120px;margin-left:10px;margin-bottom:15px">查询</button>
+					<div id="ccframe" style="margin-left:10px;margin-right:10px">
+
+					</div>
+				</div>
+			</div>
+		}
+		<div id="under" style="margin-left:5%;margin-right:5%;">
+			<span class="label label-success" style="margin-top:20px;">所有头衔：</span>
+			<span class="label label-default" style="margin-top:20px;margin-left:10px">信徒</span>
+			<span class="label label-default" style="margin-top:20px;margin-left:10px">传教士</span>
+			<span class="label label-primary" style="margin-top:20px;margin-left:10px">教主</span>
+			<span class="label label-primary" style="margin-top:20px;margin-left:10px">教皇</span>
+			<span class="label label-info" style="margin-top:20px;margin-left:10px">时官</span>
+			<span class="label label-info" style="margin-top:20px;margin-left:10px">时臣</span>
+			<span class="label label-warning" style="margin-top:20px;margin-left:10px">诸神</span>
+			<span class="label label-danger" style="margin-top:20px;margin-left:10px">时空之主</span>
+		</div>
+		<script src="~/sRaw/ui/js/jquery.min.js"></script>
+		<script src="~/sRaw/ui/js/video.js"></script>
+		<script src="~/sRaw/ui/js/flat-ui.min.js"></script>
+		<script src="~/sRaw/ui/js/prettify.js"></script>
+		<script src="~/sRaw/ui/js/application.js"></script>
+		<script src="~/sRaw/ui/js/sign.js"></script>
+		<script src="~/sRaw/ui/js/md5.js"></script>
+
+		<script>
+			window.onload = function(){
+				$("#inputcode").hide();
+				$("#noneupload").hide();
+				$("#uploadff").hide();
+			}
+			@{ string position = "0";}
+			@if (messages.Count > 0) {
+				var iicontent = messages[0];
+				List<Message> newmessages = Conf.Users[ViewBag.Username].Messages;
+				position = newmessages.IndexOf(iicontent).ToString();
+			}
+			$("#readtop").click(function () {
+				var position = @position;
+				var post = {}
+				post["position"] = position;
+				$.post("./Read",post,function(data){
+					if(data == "Success"){
+						$("#nowreadtop").text("已读");
+					}
+				});
+			});
+
+			@for (int i = 1; i <= messages.Count - 1; i++)
+			{
+				var iiicontent = messages[i];
+				List<Message> inewmessages = Conf.Users[ViewBag.Username].Messages;
+				string iposition = inewmessages.IndexOf(iiicontent).ToString();
+				string sr = "$('#read-" + i + "').click(function(){var position = " + iposition + ";var post = {}; post['position'] = position;$.post('./Read',post,function(data){if(data == 'Success'){$('#noread-" + i + "').text('已读');}});});";
+				@(new HtmlString(sr))
+			}
+
+			$("#setallread").click(function(){
+				$.post("./Readall",function(data){
+					if(data == "Success")
+						location.reload();
+				});
+			});
+
+		</script>
+		<script src="~/sRaw/ui/js/adminhome.js"></script>
+	</body>
+</html>
