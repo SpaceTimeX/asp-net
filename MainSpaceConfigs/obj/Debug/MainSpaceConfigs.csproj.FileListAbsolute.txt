@@ -1,0 +1,5 @@
+D:\Asp.Net\MainSpaceConfigs\bin\Debug\MainSpaceConfigs.dll
+D:\Asp.Net\MainSpaceConfigs\bin\Debug\MainSpaceConfigs.pdb
+D:\Asp.Net\MainSpaceConfigs\obj\Debug\MainSpaceConfigs.dll
+D:\Asp.Net\MainSpaceConfigs\obj\Debug\MainSpaceConfigs.pdb
+D:\Asp.Net\MainSpaceConfigs\obj\Debug\MainSpaceConfigs.csprojResolveAssemblyReference.cache

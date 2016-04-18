@@ -124,7 +124,7 @@
 					$("#register").removeClass("disabled");
 					iia = false;
 				} else if (data.state == "Success") {
-					window.location = "/Main/Login";
+					window.location = "@ViewBag.Url";
 					alert("注册成功！");
 
 				}

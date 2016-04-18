@@ -13,7 +13,7 @@ namespace CardWarWEB.Controllers
     {
         public IActionResult Index()
         {
-            return View("e404");
+            return View("e403");
         }
 
         [Route("404",Name = "404")]
@@ -24,6 +24,12 @@ namespace CardWarWEB.Controllers
 
         [Route("500",Name = "500")]
         public IActionResult e500()
+        {
+            return View();
+        }
+
+        [Route("403", Name = "403")]
+        public IActionResult e403()
         {
             return View();
         }

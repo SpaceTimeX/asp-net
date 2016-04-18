@@ -16,7 +16,8 @@
 		"Newtonsoft.Json": "8.0.3",
 		"Microsoft.AspNet.Http.Extensions": "1.0.0-rc1-final",
 		"Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
-		"AntiXSS": "4.3.0"
+		"AntiXSS": "4.3.0",
+		"MainSpaceConfigs": "1.0.1.2"
 	},
 
 	"commands": {

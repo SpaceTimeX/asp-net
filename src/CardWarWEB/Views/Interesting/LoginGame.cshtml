@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+	<title>登录 - 有趣的游戏</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		body:before {
+			content: ' ';
+			position: fixed;
+			z-index: -1;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: url("/sRaw/ui/img/back.jpg") 50% 0 repeat-y;
+			background-size: cover;
+		}
+
+		body {
+			background-image: url("/sRaw/ui/img/back.jpg");
+			background-repeat: no-repeat;
+			background-position: center top;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+
+		.flogin {
+			position: relative;
+			background-color: #edeff1;
+			border-radius: 6px;
+			box-sizing: border-box;
+			margin-left: 10px;
+			margin-right: 10px;
+			margin-top: 60px;
+			width: calc(100% - 20px);
+		}
+
+		.input {
+			margin-bottom: 10px;
+		}
+
+		.about {
+			position: relative;
+			margin-bottom: 10px;
+			text-align: center;
+			color: white;
+		}
+
+		.aboutf {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			text-align: center;
+		}
+
+		.toend {
+			position: absolute;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="toend">
+		<div class="flogin container" style="opacity:0.9" id="view">
+			<h3 class="headline"><font face="黑体">有趣的游戏 - 登录</font></h3>
+			<input type="text" placeholder="输入账号" class="input form-control" id="inputusername" />
+			<input type="password" placeholder="输入密码" class="input form-control" id="inputpassword" />
+			<button class="btn btn-embossed btn-primary" style="width:100%;margin-bottom:10px" id="login">登录 - 开始游戏</button>
+			<button class="btn btn-primary" style="width:100%;margin-bottom:20px" id="register">点击这里注册一个账号</button>
+		</div>
+		<div class="aboutf">
+			<h5 class="about">Powered By SpaceTimeX</h5>
+			<h6 class="about">Using Custom Application</h6>
+		</div>
+	</div>
+	<script src="~/sRaw/ui/js/jquery.min.js"></script>
+	<script src="~/sRaw/ui/js/bootstrap.min.js"></script>
+	<script src="~/sRaw/ui/js/video.js"></script>
+	<script src="~/sRaw/ui/js/prettify.js"></script>
+	<script src="~/sRaw/ui/js/application.js"></script>
+	<script src="~/sRaw/ui/js/sign.js"></script>
+	<script>
+
+		$("#login").click(function () {
+			var _username = $("#inputusername").val();
+			var _password = $("#inputpassword").val();
+			var arg = {};
+			arg["username"] = _username;
+			arg["password"] = _password;
+			$.post("/Interesting/CheckLogin", arg, function (data) {
+				if (data.state == "Error") {
+					var added = '<div class="alert alert-danger alert-dismissible fade in" style="margin-top:10px" role="alert">\n' +
+					'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>\n' +
+					'<Font size=2><strong>' + data.error + '</strong></FONT> \n' +
+					'</div>';
+					$("#view").prepend(added);
+
+				} else if (data.state == "Success") {
+					window.location = "/Interesting/MainGame";
+				}
+			}, "json");
+
+		});
+
+		$("#register").click(function () {
+			window.location = "/Main/Register?url=/Interesting/LoginGame";
+		});
+
+	</script>
+</body>
+</html>

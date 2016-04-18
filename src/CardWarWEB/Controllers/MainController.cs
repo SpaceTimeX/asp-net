@@ -82,8 +82,8 @@ namespace CardWarWEB.Controllers
             return View();
         }
 
-        [Route("Register")]
-        public IActionResult Register()
+        [Route("Register/{url?}")]
+        public IActionResult Register(string url)
         {
             if (CheckLogin())
             {
@@ -91,6 +91,9 @@ namespace CardWarWEB.Controllers
                 Response.Redirect("/Home");
             }
 
+            if (string.IsNullOrEmpty(url))
+                url = "/Main/Login";
+            ViewBag.Url = url;
             return View();
         }
 
@@ -816,7 +819,7 @@ namespace CardWarWEB.Controllers
             {
                 Server.RemoveCookie(this, "username");
                 Server.RemoveCookie(this, "password");
-                return "Error";
+                return View("Login");
             }
             string username = Request.Cookies["username"];
             if (Conf.Admins.Contains(username))
@@ -1325,7 +1328,7 @@ namespace CardWarWEB.Controllers
             }
 
             string s = Server.Decode(incode);
-            if (!s.StartsWith("SpaceTimeX-AMXX-Helper") || !s.EndsWith("SpaceTimeX-AMXX-Helper"))
+            if (!s.EndsWith("SpaceTimeX-AMXX-Helper"))
             {
                 return "授权码无效！";
             }
@@ -1440,7 +1443,7 @@ namespace CardWarWEB.Controllers
 
                     ssssrr += "\n";
                 }
-                ssssrr = Server.En(ssssrr);
+                ssssrr = Server.Encode(ssssrr);
                 if (string.IsNullOrEmpty(ssssrr)) return "None";
 
                 return ssssrr;
@@ -1772,7 +1775,7 @@ namespace CardWarWEB.Controllers
             return "未知错误";
         }
 
-        [Route("CopyLic")]
+        [Route("CopyLicence")]
         [HttpPost]
         public object CopyLic()
         {
@@ -1914,7 +1917,7 @@ namespace CardWarWEB.Controllers
 
                 ssssrr += "\n";
             }
-            ssssrr = Server.En(ssssrr);
+            ssssrr = Server.Encode(ssssrr);
             if (string.IsNullOrEmpty(ssssrr)) return "None";
 
             byte[] by = Encoding.Default.GetBytes(ssssrr);
@@ -1932,69 +1935,4 @@ namespace CardWarWEB.Controllers
     }
 
 
-}
-namespace CardWarWEB
-{
-
-    [Serializable]
-    public class AmxxHelper
-    {
-        public string AmxxName;
-        public string AmxxMD5;
-        public bool isEnabled;
-        public long TimeStamps; //2524579200000
-        public AmxxHelper(string AmxxName, string AmxxMD5, bool isEnabled, long TimeStamps = 2524579200000)
-        {
-            this.AmxxName = AmxxName;
-            this.AmxxMD5 = AmxxMD5;
-            this.isEnabled = isEnabled;
-            this.TimeStamps = TimeStamps;
-        }
-    }
-
-
-    [Serializable]
-    public class PostReply
-    {
-        public string Username;
-        public string Content;
-        public string Time;
-        public int Id;
-        public PostReply(string Username, string Content, string Time, int Id)
-        {
-            this.Username = Username;
-            this.Content = Content;
-            this.Time = Time;
-            this.Id = Id;
-        }
-
-    }
-
-    [Serializable]
-    public class PostThread
-    {
-        public string Title;
-        public string Content;
-        public string Username;
-        public string Time;
-        public int Id;
-        public bool Need;
-        public long NeedCoin;
-        public long NeedPrestige;
-        public long NeedPoint;
-        public bool NeedReply;
-        public PostThread(string Title, string Content, string Username, string Time, int Id, bool Need = false, long NeedCoin = 0, long NeedPrestige = 0, long NeedPoint = 0, bool NeedReply = false)
-        {
-            this.Title = Title;
-            this.Content = Content;
-            this.Username = Username;
-            this.Time = Time;
-            this.Id = Id;
-            this.Need = Need;
-            this.NeedCoin = NeedCoin;
-            this.NeedPrestige = NeedPrestige;
-            this.NeedPoint = NeedPoint;
-            this.NeedReply = NeedReply;
-        }
-    }
 }

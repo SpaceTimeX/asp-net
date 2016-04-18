@@ -16,7 +16,7 @@ namespace CardWarWEB
     {
         public static string MapPath(string path)
         {
-            return Conf.env.MapPath(path);
+            return localConf.env.MapPath(path);
 
         }
 
@@ -29,12 +29,12 @@ namespace CardWarWEB
         }
         public static string GetApplicationBasePath()
         {
-            return Conf.appEnv.ApplicationBasePath;
+            return localConf.appEnv.ApplicationBasePath;
         }
 
         public static string GetWebRootPath()
         {
-            return Conf.env.WebRootPath;
+            return localConf.env.WebRootPath;
         }
 
         public static string MD5Encrypt(string strText)
@@ -59,12 +59,49 @@ namespace CardWarWEB
             return rgx.IsMatch(pwd);
         }
 
+        public static void SaveAreaThreads()
+        {
+            if (Directory.Exists("/v"))
+            {
+                FileStream fs = new FileStream("/v/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, Conf.AreaThreads);
+                fs.Close();
+            }
+            else
+            {
+                FileStream fs = new FileStream(GetApplicationBasePath() + "/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, Conf.AreaThreads);
+                fs.Close();
+            }
+
+        }
+
+
+        public static void SaveWebConfigs()
+        {
+            if (Directory.Exists("/v"))
+            {
+                FileStream fs = new FileStream("/v/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, Conf.WebConfigs);
+                fs.Close();
+            }
+            else
+            {
+                FileStream fs = new FileStream(GetApplicationBasePath() + "/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(fs, Conf.WebConfigs);
+                fs.Close();
+            }
+
+        }
 
         public static void SaveUsersConf()
         {
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
                 FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Users);
@@ -72,7 +109,6 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(GetApplicationBasePath() + "/Users");
                 FileStream fs = new FileStream(GetApplicationBasePath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Users);
@@ -85,7 +121,6 @@ namespace CardWarWEB
         {
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
                 FileStream fs = new FileStream("/v/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Threads);
@@ -93,7 +128,6 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(GetApplicationBasePath() + "/Users");
                 FileStream fs = new FileStream(GetApplicationBasePath() + "/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Threads);
@@ -106,7 +140,6 @@ namespace CardWarWEB
         {
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
                 FileStream fs = new FileStream("/v/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Replys);
@@ -114,7 +147,6 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(GetApplicationBasePath() + "/Users");
                 FileStream fs = new FileStream(GetApplicationBasePath() + "/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Replys);
@@ -127,7 +159,6 @@ namespace CardWarWEB
         {
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
                 FileStream fs = new FileStream("/v/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.ThreadReplys);
@@ -135,7 +166,6 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(GetApplicationBasePath() + "/Users");
                 FileStream fs = new FileStream(GetApplicationBasePath() + "/ThreadReplys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.ThreadReplys);
@@ -148,7 +178,6 @@ namespace CardWarWEB
         {
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
                 FileStream fs = new FileStream("/v/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Emails);
@@ -156,7 +185,6 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(GetApplicationBasePath() + "/Users");
                 FileStream fs = new FileStream(GetApplicationBasePath() + "/Emails.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                 BinaryFormatter bf = new BinaryFormatter();
                 bf.Serialize(fs, Conf.Emails);
@@ -169,6 +197,8 @@ namespace CardWarWEB
         {
             try
             {
+                SaveWebConfigs();
+                SaveAreaThreads();
                 SaveUsersConf();
                 SaveThreads();
                 SaveReplys();
@@ -182,24 +212,6 @@ namespace CardWarWEB
             }
         }
 
-        [DllImport(".\\src\\CardWarWEB\\Mail.dll")]
-        extern static bool SendMail(IntPtr Title, IntPtr Content, IntPtr SendTo);
-        [DllImport(".\\src\\CardWarWEB\\Mail.dll")]
-        extern static IntPtr Encode(IntPtr username);
-        [DllImport(".\\src\\CardWarWEB\\Mail.dll")]
-        extern static IntPtr Decode(IntPtr code);
-        [DllImport(".\\src\\CardWarWEB\\Mail.dll")]
-        static extern IntPtr De(IntPtr content);
-        [DllImport(".\\src\\CardWarWEB\\Mail.dll")]
-        static extern IntPtr En(IntPtr content);
-        public static bool SendMail2(string Title, string Content, string SendTo)
-        {
-
-            IntPtr iTitle = sg(Title);
-            IntPtr iContent = sg(Content);
-            IntPtr iSendTo = sg(SendTo);
-            return SendMail(iTitle, iContent, iSendTo);
-        }
 
         public static bool SendMail(string Title, string Content, string SendTo) {
 
@@ -207,30 +219,55 @@ namespace CardWarWEB
             return email.Send();
         }
 
-        public static string De(string content)
+        public static byte[] byteCut(byte[] b)
         {
-            IntPtr icontent = sg(content);
-            return gs(De(icontent));
-
+            return byteCut(b, 0x00);
         }
-        public static string En(string content)
+
+        public static EvalResult Eval(string code, string invoke) {
+
+            Evaluator eval = new Evaluator();
+            EvalResult evalr = new EvalResult();
+            string err = "";
+            object res;
+            res = eval.Eval(code, invoke, out err);
+            if (!string.IsNullOrEmpty(err))
+            {
+                evalr.isSuccess = false;
+                evalr.ErrorMessage=err;
+                return evalr;
+            }
+            evalr.isSuccess = true;
+            evalr.ReturnResult = res;
+            
+            return evalr;
+        }
+
+        public static byte[] byteCut(byte[] b, byte cut)
         {
-            IntPtr icontent = sg(content);
-            return gs(En(icontent));
-
+            List<byte> list = new List<byte>();
+            list.AddRange(b);
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i] == cut)
+                    list.RemoveAt(i);
+            }
+            byte[] lastbyte = new byte[list.Count];
+            for (int i = 0; i < list.Count; i++)
+            {
+                lastbyte[i] = list[i];
+            }
+            return lastbyte;
         }
-        public static string Encode(string username) {
-            IntPtr iusername = sg(username);
-            IntPtr res = Encode(iusername);
-            string s = gs(res);
+
+        public static string Encode(string content) {
+            string s = EncryptUtils.DES3Encrypt(content, "MainSpace-AmxxHelper-000");
             return s;
         }
 
         public static string Decode(string code)
         {
-            IntPtr icode = sg(code);
-            IntPtr res = Decode(icode);
-            string s = gs(res);
+            string s = EncryptUtils.DES3Decrypt(code, "MainSpace-AmxxHelper-000");
             return s;
         }
 
@@ -263,6 +300,12 @@ namespace CardWarWEB
         {
             return DateTimeToStamp(DateTime.Now);
 
+        }
+
+        public static double GetARM(long AR)
+        {
+            double d = ((double)AR / (double)AR + 100d);
+            return d;
         }
     }
 }

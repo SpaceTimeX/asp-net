@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CardWarWEB", "src\CardWarWEB\CardWarWEB.xproj", "{2A9985AA-916A-4B11-BCE0-EE18453199A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainSpaceConfigs", "MainSpaceConfigs\MainSpaceConfigs.csproj", "{B6EC036A-9F79-4D58-9F17-12FA9607E452}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{2A9985AA-916A-4B11-BCE0-EE18453199A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A9985AA-916A-4B11-BCE0-EE18453199A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A9985AA-916A-4B11-BCE0-EE18453199A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6EC036A-9F79-4D58-9F17-12FA9607E452}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6EC036A-9F79-4D58-9F17-12FA9607E452}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6EC036A-9F79-4D58-9F17-12FA9607E452}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6EC036A-9F79-4D58-9F17-12FA9607E452}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

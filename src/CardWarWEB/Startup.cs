@@ -15,6 +15,8 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CardWarWEB
 {
@@ -25,8 +27,8 @@ namespace CardWarWEB
 
         public Startup(IHostingEnvironment env, IApplicationEnvironment appEnv)
         {
-            Conf.env = env;
-            Conf.appEnv = appEnv;
+            localConf.env = env;
+            localConf.appEnv = appEnv;
         }
 
 
@@ -67,12 +69,8 @@ namespace CardWarWEB
             };
 
             FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider(mappings);
-
-            app.UseStaticFiles(new StaticFileOptions() { ServeUnknownFileTypes = false, ContentTypeProvider = provider, RequestPath = "/sRaw" });
-
-            DirectoryBrowserOptions diroptions = new DirectoryBrowserOptions();
-            diroptions.RequestPath = "/sRaw";
-            app.UseDirectoryBrowser(diroptions);
+            PhysicalFileProvider physicalprovider = new PhysicalFileProvider(Server.GetApplicationBasePath() + "/sRaw");
+            app.UseStaticFiles(new StaticFileOptions() { ServeUnknownFileTypes = false, ContentTypeProvider = provider, RequestPath = "/sRaw", FileProvider = physicalprovider });
             app.UseStatusCodePages(status =>
             {
                 bool over = false;
@@ -101,7 +99,34 @@ namespace CardWarWEB
 
             if (Directory.Exists("/v"))
             {
-                Directory.CreateDirectory("/v/Users");
+                if (File.Exists("/v/WebConfigs.data"))
+                {
+                    FileStream fs = new FileStream("/v/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.WebConfigs = (WebConfig)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.WebConfigs);
+                    fs.Close();
+                }
+
+                if (File.Exists("/v/AreaThreads.data"))
+                {
+                    FileStream fs = new FileStream("/v/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.AreaThreads = (Dictionary<int, List<int>>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream("/v/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.AreaThreads);
+                    fs.Close();
+                }
+
                 if (File.Exists("/v/Users.data"))
                 {
                     FileStream fs = new FileStream("/v/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -174,7 +199,34 @@ namespace CardWarWEB
             }
             else
             {
-                Directory.CreateDirectory(Server.GetApplicationBasePath() + "/Users");
+                if (File.Exists(Server.GetApplicationBasePath() + "/WebConfigs.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.WebConfigs = (WebConfig)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/WebConfigs.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.WebConfigs);
+                    fs.Close();
+                }
+
+                if (File.Exists(Server.GetApplicationBasePath() + "/AreaThreads.data"))
+                {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    Conf.AreaThreads = (Dictionary<int, List<int>>)bf.Deserialize(fs);
+                    fs.Close();
+                }
+                else {
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/AreaThreads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    BinaryFormatter bf = new BinaryFormatter();
+                    bf.Serialize(fs, Conf.AreaThreads);
+                    fs.Close();
+                }
+
                 if (File.Exists(Server.GetApplicationBasePath() + "/Users.data"))
                 {
                     FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Users.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
@@ -189,30 +241,30 @@ namespace CardWarWEB
                     fs.Close();
                 }
 
-                if (File.Exists(Server.GetApplicationBasePath() + "/ThreadsName.data"))
+                if (File.Exists(Server.GetApplicationBasePath() + "/Threads.data"))
                 {
-                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadsName.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
                     Conf.Threads = (Dictionary<int, PostThread>)bf.Deserialize(fs);
                     fs.Close();
                 }
                 else {
-                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ThreadsName.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Threads.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
                     bf.Serialize(fs, Conf.Threads);
                     fs.Close();
                 }
 
 
-                if (File.Exists(Server.GetApplicationBasePath() + "/ReplysContents.data"))
+                if (File.Exists(Server.GetApplicationBasePath() + "/Replys.data"))
                 {
-                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ReplysContents.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
                     Conf.Replys = (Dictionary<int, PostReply>)bf.Deserialize(fs);
                     fs.Close();
                 }
                 else {
-                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/ReplysContents.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    FileStream fs = new FileStream(Server.GetApplicationBasePath() + "/Replys.data", FileMode.OpenOrCreate, FileAccess.ReadWrite);
                     BinaryFormatter bf = new BinaryFormatter();
                     bf.Serialize(fs, Conf.Replys);
                     fs.Close();
@@ -248,7 +300,6 @@ namespace CardWarWEB
                 }
 
             }
-
 
         }
     }

@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<script>
+		var a = '<div id="loading" class="shade" times="1" style="background-color:#212121; opacity:1; z-index:10000; filter:alpha(opacity=30);"><div style="color:white; text-align:center;">页面加载中，请等待...</div></div>';
+		document.write(a);
+		document.onreadystatechange = completeLoading;
+
+		//加载状态为complete时移除loading效果
+		function completeLoading() {
+			if (document.readyState == "complete") {
+				document.body.removeChild(document.getElementById("loading"));
+			}
+		}
+	</script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>冒险 - 有趣的游戏</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		body:before {
+			content: ' ';
+			position: fixed;
+			z-index: -1;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: url("/sRaw/ui/img/back.jpg") 50% 0 repeat-y;
+			background-size: cover;
+		}
+
+		body {
+			background-image: url("/sRaw/ui/img/back.jpg");
+			background-repeat: no-repeat;
+			background-position: center top;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+
+		.toend {
+			position: absolute;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+
+		.shade {
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			_position: absolute;
+			pointer-events: auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="modal fade in" id="notice" tabindex="-1" role="dialog" aria-labelledby="notice" style="opacity:0.9">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="notice">公告</h4>
+				</div>
+				<div class="modal-body" id="noticebody">
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="htop">
+								<h4 class="panel-title">
+									<button class="btn btn-danger" style="width:100%" role="button" data-toggle="collapse" data-parent="#accordion" href="#n1" aria-expanded="true" aria-controls="n1">
+										<strong>2016/04/16 ~ 2017/04/16 世界BOSS活动</strong>
+									</button>
+								</h4>
+							</div>
+							<div id="n1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="htop">
+								<div class="panel-body">
+									<strong>来自 时空军团 的精英BOSS：火元素，正在主城附近游荡，请玩家速速击杀BOSS，击杀有奖哦~</strong>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading" role="tab" id="htop">
+								<h4 class="panel-title">
+									<button class="btn btn-primary" style="width:100%" role="button" data-toggle="collapse" data-parent="#accordion" href="#n2" aria-expanded="true" aria-controls="n2">
+										<strong>2016/04/16 ~ 2017/04/16 祈愿祭坛</strong>
+									</button>
+								</h4>
+							</div>
+							<div id="n2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="htop">
+								<div class="panel-body">
+									<strong>有很多好东西。。。</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade in" id="detail" tabindex="-1" role="dialog" aria-labelledby="detail" style="opacity:0.9">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="notice">详细信息 - 点击属性查看说明</h4>
+				</div>
+				<div class="modal-body" id="detailbody">
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="生命值" data-content="在被消灭之前所能承受的最大伤害" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>生命值：</span><span class="label label-default" style="margin-left:5px" id="hp">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="法力值" data-content="释放技能的力量源泉" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>法力值：</span><span class="label label-default" style="margin-left:5px" id="mp">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="物理攻击" data-content="普通攻击所造成的最大伤害" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>物理攻击：</span><span class="label label-default" style="margin-left:5px" id="ad">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="法术攻击" data-content="释放技能的伤害加成" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>法术攻击：</span><span class="label label-default" style="margin-left:5px" id="ap">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="护甲" data-content="决定伤害减免的值" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>护甲：</span><span class="label label-default" style="margin-left:5px" id="ar">0.0000</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="伤害减免" data-content="减少所受到的伤害" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>伤害减免：</span><span class="label label-default" style="margin-left:5px" id="arm">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="闪避率" data-content="一定几率闪避伤害技能" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>闪避率：</span><span class="label label-default" style="margin-left:5px" id="miss">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="暴击率" data-content="一定几率造成N倍伤害" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>暴击率：</span><span class="label label-default" style="margin-left:5px" id="boom">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-info" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="额外伤害" data-content="最终伤害加成" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>额外伤害：</span><span class="label label-default" style="margin-left:5px" id="ex">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-info" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="护甲穿透" data-content="忽略目标一部分伤害减免百分比" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>护甲穿透：</span><span class="label label-default" style="margin-left:5px" id="pt">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<DIV style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px"></DIV>
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="力量" data-content="每1点力量增加3物理攻击，12生命值，0.0006%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>力量：</span><span class="label label-success" style="margin-left:5px" id="ll">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="智力" data-content="每1点智力增加5法术攻击，16法力值，0.0006%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>智力：</span><span class="label label-success" style="margin-left:5px" id="zl">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="耐力" data-content="每1点耐力增加18生命值，22法力值，0.007护甲" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>耐力：</span><span class="label label-success" style="margin-left:5px" id="nl">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="闪避" data-content="每1点闪避增加18生命值，22法力值，0.004%闪避率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>闪避：</span><span class="label label-success" style="margin-left:5px" id="sb">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="精准" data-content="每1点精准增加3攻击力，4法术攻击，0.002%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>精准：</span><span class="label label-success" style="margin-left:5px" id="jz">0</span><br />
+					<div style="margin-top:10px"></div>
+					<DIV style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px"></DIV>
+					<div style="margin-top:10px"></div>
+					<span class="label label-warning">已分配点数：</span><span class="label label-primary" style="margin-left:5px" id="used">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-success">未分配点数：</span><span class="label label-primary" style="margin-left:5px" id="nonused">0</span><br />
+					<div style="margin-top:10px"></div>
+					<button class="btn btn-info" style="width:100%" id="usepoint">分配点数</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade in" id="usepointm" tabindex="-1" role="dialog" aria-labelledby="usepointm" style="opacity:0.9">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="notice">分配点数 - 点击属性查看说明</h4>
+				</div>
+				<div class="modal-body" id="usepointmbody">
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="力量" data-content="每1点力量增加3物理攻击，12生命值，0.0006%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>力量：</span><span class="label label-info" style="margin-left:5px" id="ull" ori="0">0</span>
+					<a href="javascript:void(0)" class="label label-success addu" style="margin-left:5px" utarget="#ull">＋</a><a href="javascript:void(0)" class="label label-danger minu" style="margin-left:5px" utarget="#ull">－</a>
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="智力" data-content="每1点智力增加5法术攻击，16法力值，0.0006%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>智力：</span><span class="label label-info" style="margin-left:5px" id="uzl" ori="0">0</span>
+					<a href="javascript:void(0)" class="label label-success addu" style="margin-left:5px" utarget="#uzl">＋</a><a href="javascript:void(0)" class="label label-danger minu" style="margin-left:5px" utarget="#uzl">－</a>
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="耐力" data-content="每1点耐力增加18生命值，22法力值，0.007护甲" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>耐力：</span><span class="label label-info" style="margin-left:5px" id="unl" ori="0">0</span>
+					<a href="javascript:void(0)" class="label label-success addu" style="margin-left:5px" utarget="#unl">＋</a><a href="javascript:void(0)" class="label label-danger minu" style="margin-left:5px" utarget="#unl">－</a>
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="闪避" data-content="每1点闪避增加18生命值，22法力值，0.004%闪避率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>闪避：</span><span class="label label-info" style="margin-left:5px" id="usb" ori="0">0</span>
+					<a href="javascript:void(0)" class="label label-success addu" style="margin-left:5px" utarget="#usb">＋</a><a href="javascript:void(0)" class="label label-danger minu" style="margin-left:5px" utarget="#usb">－</a>
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary" data-container="body" data-toggle="popover" data-trigger="hover" data-placement="bottom" title="精准" data-content="每1点精准增加3攻击力，4法术攻击，0.002%暴击率" data-template='<div class="popover" role="tooltip" style="opacity:0.92"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'>精准：</span><span class="label label-info" style="margin-left:5px" id="ujz" ori="0">0</span>
+					<a href="javascript:void(0)" class="label label-success addu" style="margin-left:5px" utarget="#ujz">＋</a><a href="javascript:void(0)" class="label label-danger minu" style="margin-left:5px" utarget="#ujz">－</a>
+					<div style="margin-top:10px"></div>
+					<DIV style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px"></DIV>
+					<div style="margin-top:10px"></div>
+					<span class="label label-warning">已分配点数：</span><span class="label label-info" style="margin-left:5px" id="uused">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-success">未分配点数：</span><span class="label label-info" style="margin-left:5px" id="unonused">0</span><br />
+					<div style="margin-top:10px"></div>
+					<DIV style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px"></DIV>
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升生命值：</span><span class="label label-warning" style="margin-left:5px" id="uhp">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升法力值：</span><span class="label label-warning" style="margin-left:5px" id="ump">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升物理攻击：</span><span class="label label-warning" style="margin-left:5px" id="uad">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升法术攻击：</span><span class="label label-warning" style="margin-left:5px" id="uap">0</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升护甲：</span><span class="label label-warning" style="margin-left:5px" id="uar">0.0000</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升伤害减免：</span><span class="label label-warning" style="margin-left:5px" id="uarm">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升闪避率：</span><span class="label label-warning" style="margin-left:5px" id="umiss">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-primary">提升暴击率：</span><span class="label label-warning" style="margin-left:5px" id="uboom">0.0000%</span><br />
+					<div style="margin-top:10px"></div>
+					<button class="btn btn-success" style="width:100%" id="okuse">确认分配</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	@using CardWarWEB
+	<div class="modal fade in" id="worldboss" tabindex="-1" role="dialog" aria-labelledby="worldboss" style="opacity:0.9">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">世界BOSS</h4>
+				</div>
+				<div class="modal-body" id="worldbossbody">
+					<span class="label" style="background-color:#FF9349">精英</span><span class="label label-primary" style="margin-left:5px" id="bossname">火元素</span><span class="label" style="background-color:#229281;margin-left:5px">LV.200</span><br />
+					<div style="margin-top:10px"></div>
+					<span class="label label-danger">生命值：</span><span class="label label-success" style="margin-left:5px" id="bosshp">@Conf.WebConfigs.Active.NOWHP.ToString()/@Conf.WebConfigs.Active.HP.ToString()</span><br />
+					<div style="margin-top:10px"></div>
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped active" role="progressbar" style="background-color: #943CDA;min-width: 4em;width: @(string.Format("{0:F2}%",(((double)Conf.WebConfigs.Active.NOWHP / (double)Conf.WebConfigs.Active.HP)) * 100))" id="bosshpprogress">
+							<span id="hpprogress">@(string.Format("{0:F2}%", (((double)Conf.WebConfigs.Active.NOWHP / (double)Conf.WebConfigs.Active.HP)) * 100))</span>
+						</div>
+					</div>
+					<button class="btn btn-danger" style="width:100%" id="attackboos">攻击</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="toend">
+		<div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;margin-top: 20px;width: calc(100% - 20px);opacity:0.9">
+			<div class="panel-body">
+				<strong>属性栏 - 冒险者：@ViewData["Nick"].ToString()</strong>
+			</div>
+			<div class="panel-footer">
+				<span class="label label-success">冒险者：</span><span class="label label-info" style="margin-left:5px">@ViewData["Nick"].ToString()</span><br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">职业：</span><span class="label label-warning" style="margin-left:5px">@ViewData["Class"].ToString()</span><br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">等级：</span><span class="label label-danger" style="margin-left:5px" id="level">1</span><br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">经验值：</span><span class="label label-danger" style="margin-left:5px" id="exps">0/100</span><br />
+				<div style="margin-top:10px"></div>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped active" role="progressbar" style="min-width: 4em;width: 0%" id="expprogress">
+						<span id="expsprogress">0%</span>
+					</div>
+				</div>
+				<a href="javascript:void(0)" class="label label-info" id="viewdetail">详细信息</a>
+				<a href="javascript:void(0)" class="label label-warning" style="margin-left:5px" id="showbackpack">打开背包</a>
+				<a href="javascript:void(0)" class="label label-danger" style="margin-left:5px" id="shownotice">显示公告</a><br />
+				<div style="margin-top:10px"></div>
+				<a href="javascript:void(0)" class="label label-primary" id="levelrank">等级排行</a>
+				<a href="javascript:void(0)" class="label label-primary" style="margin-left:5px" id="moneyrank">金钱排行</a>
+				<a href="javascript:void(0)" class="label label-primary" style="margin-left:5px" id="damagerank">伤害排行</a>
+			</div>
+		</div>
+		<div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;margin-top: 10px;width: calc(100% - 20px);opacity:0.9">
+			<div class="panel-body">
+				<strong>游戏</strong>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-danger" style="float:right" id="bworldboss">世界BOSS</button>
+				<button class="btn btn-success">单人探险</button><br />
+				<button class="btn btn-default disabled" style="margin-top:10px">多人探险(禁用)</button>
+			</div>
+		</div>
+		<div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;margin-top: 10px;width: calc(100% - 20px);opacity:0.9">
+			<div class="panel-body">
+				<strong>祭坛</strong>
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-danger" style="float:right">祈愿祭坛</button>
+				<button class="btn btn-success">金币祭坛</button><br />
+				<button class="btn btn-default disabled" style="margin-top:10px">永恒祭坛(禁用)</button>
+			</div>
+		</div>
+	</div>
+	<script src="~/sRaw/ui/js/jquery.min.js"></script>
+	<script src="~/sRaw/layer/layer.js"></script>
+	<script src="~/sRaw/ui/js/bootstrap.min.js"></script>
+	<script src="~/sRaw/ui/js/video.js"></script>
+	<script src="~/sRaw/ui/js/prettify.js"></script>
+	<script src="~/sRaw/ui/js/application.js"></script>
+	<script src="~/sRaw/ui/js/sign.js"></script>
+	<script src="~/sRaw/ui/js/gametool.js"></script>
+	<script src="~/sRaw/ui/js/maingame.js"></script>
+</body>
+</html>

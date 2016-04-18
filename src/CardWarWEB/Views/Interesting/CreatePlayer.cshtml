@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>建立新人物 - 有趣的游戏</title>
+	<!-- Loading Bootstrap -->
+	<link href="~/sRaw/ui/css/bootstrap.min.css" rel="stylesheet">
+
+	<link rel="shortcut icon" href="~/sRaw/ui/img/favicon.ico">
+
+	<style>
+		body:before {
+			content: ' ';
+			position: fixed;
+			z-index: -1;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background: url("/sRaw/ui/img/back.jpg") 50% 0 repeat-y;
+			background-size: cover;
+		}
+
+		body {
+			background-image: url("/sRaw/ui/img/back.jpg");
+			background-repeat: no-repeat;
+			background-position: center top;
+			background-size: cover;
+			background-attachment: fixed;
+		}
+
+		.toend {
+			position: absolute;
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div class="toend">
+		<div class="panel panel-default" style="margin-left: 10px;margin-right: 10px;margin-top: 60px;width: calc(100% - 20px);opacity:0.9">
+			<div class="panel-body">
+				<strong>建立新人物 - 激活游戏</strong>
+			</div>
+			<div class="panel-footer">
+				<input type="text" placeholder="取一个好听的名字！" class="input form-control" style="margin-bottom:10px" id="nickname" />
+				<span class="label label-primary">选一个喜欢的职业：</span><br/>
+				<div style="margin-top:10px"></div>
+				<a href="javascript:void(0)" class="label label-danger" id="zs">战士</a>
+				<a href="javascript:void(0)" class="label label-danger" id="fs">法师</a>
+				<a href="javascript:void(0)" class="label label-danger" id="ck">刺客</a>
+				<a href="javascript:void(0)" class="label label-danger" id="qs">骑士</a><br/>
+				<div style="margin-top:10px"></div>
+				<span class="label label-info">当前选择的职业是：</span>
+				<span class="label label-success" id="ccclass">战士</span>
+				<span class="label label-warning" id="ccclassinfo">物理攻击 平衡</span><br />
+				<div style="margin-top:10px"></div>
+				<DIV style="BORDER-TOP: #00686b 1px dashed; OVERFLOW: hidden; HEIGHT: 1px"></DIV>
+				<div style="margin-top:10px"></div>
+				<span class="label label-primary">职业属性：</span><br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">生命值：</span>
+				<span class="label label-success" id="hp">80</span>
+				<br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">法力值：</span>
+				<span class="label label-success" id="mp">45</span>
+				<br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">物理攻击：</span>
+				<span class="label label-success" id="ad">11</span>
+				<br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">法术攻击：</span>
+				<span class="label label-success" id="ap">0</span>
+				<br />
+				<div style="margin-top:10px"></div>
+				<span class="label label-success">护甲：</span>
+				<span class="label label-success" id="ar">11(-9.9%)</span>
+				<br />
+				<button class="btn btn-embossed btn-info" style="width:100%;margin-top:10px" id="ok">确认</button>
+			</div>
+		</div>
+
+
+	</div>
+
+
+
+	<script src="~/sRaw/ui/js/jquery.min.js"></script>
+	<script src="~/sRaw/ui/js/bootstrap.min.js"></script>
+	<script src="~/sRaw/ui/js/video.js"></script>
+	<script src="~/sRaw/ui/js/prettify.js"></script>
+	<script src="~/sRaw/ui/js/application.js"></script>
+	<script src="~/sRaw/ui/js/sign.js"></script>
+	<script src="~/sRaw/ui/js/ccclass.js"></script>
+</body>
+</html>

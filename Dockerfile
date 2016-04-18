@@ -18,7 +18,7 @@ RUN bash -c "source $DNX_USER_HOME/dnvm/dnvm.sh \
 # Combining this with the uninstall and purge will save us the space of the build tools in the image
 RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -qq update \
-	&& apt-get -qqy install autoconf automake build-essential libtool \
+	&& apt-get -qqy install autoconf automake build-essential libtool git zip \
 	&& curl -sSL https://github.com/libuv/libuv/archive/v${LIBUV_VERSION}.tar.gz | tar zxfv - -C /usr/local/src \
 	&& cd /usr/local/src/libuv-$LIBUV_VERSION \
 	&& sh autogen.sh && ./configure && make && make install \
@@ -28,6 +28,8 @@ RUN LIBUV_VERSION=1.4.2 \
 	&& apt-get -y autoremove \
 	&& apt-get -y clean \
 	&& rm -rf /var/lib/apt/lists/*
+	
+Run ["git", "clone", "https://git.oschina.net/mainspace/asp-net.git", "/app/"]
 
 ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
 
@@ -35,7 +37,6 @@ ENV PATH $PATH:$DNX_USER_HOME/runtimes/default/bin
 ENV MONO_THREADS_PER_CPU 50
 
 VOLUME /v
-COPY . /app
 WORKDIR /app/src/CardWarWEB/
 RUN ["dnu", "restore"]
 
